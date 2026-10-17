@@ -44,6 +44,7 @@
 #include "MEPCommands.hpp"
 #include "KeynoteCommands.hpp"
 #include "GraphicOverrideCommands.hpp"
+#include "ProbeCommands.hpp"
 #include "GridElementCommands.hpp"
 #include "GraphicalOverrideCommands.hpp"
 
@@ -954,6 +955,10 @@ GSErrCode Initialize (void)
         err |= RegisterCommand<GetGraphicOverrideRuleGroupsCommand> (
             attributeCommands, "1.7.2",
             "Gets all graphic override rule groups of the project with the rules they contain, empty groups included. Available from Archicad 27."
+        );
+        err |= RegisterCommand<ProbeOverridesCommand> (
+            attributeCommands, "1.7.2",
+            "Local experiment."
         );
         err |= RegisterCommand<DeleteGraphicOverrideRuleGroupsCommand> (
             attributeCommands, "1.7.2",
