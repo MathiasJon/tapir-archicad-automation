@@ -1201,6 +1201,80 @@ bool ApplyWallDetails (API_Element& element, API_Element& mask, const GS::Object
         ACAPI_ELEMENT_MASK_SET (mask, API_WallType, bottomOffset);
         changed = true;
     }
+    GS::UniString referenceLineLocationStr;
+    if (details.Get ("referenceLineLocation", referenceLineLocationStr)) {
+        element.wall.referenceLineLocation = WallReferenceLineLocationFromString (referenceLineLocationStr);
+        ACAPI_ELEMENT_MASK_SET (mask, API_WallType, referenceLineLocation);
+        changed = true;
+    }
+    auto slantAlpha = GetOptionalDouble (details, "slantAlpha");
+    if (slantAlpha.HasValue ()) {
+        element.wall.slantAlpha = slantAlpha.Get ();
+        ACAPI_ELEMENT_MASK_SET (mask, API_WallType, slantAlpha);
+        changed = true;
+    }
+    auto slantBeta = GetOptionalDouble (details, "slantBeta");
+    if (slantBeta.HasValue ()) {
+        element.wall.slantBeta = slantBeta.Get ();
+        ACAPI_ELEMENT_MASK_SET (mask, API_WallType, slantBeta);
+        changed = true;
+    }
+    auto topOffset = GetOptionalDouble (details, "topOffset");
+    if (topOffset.HasValue ()) {
+        element.wall.topOffset = topOffset.Get ();
+        ACAPI_ELEMENT_MASK_SET (mask, API_WallType, topOffset);
+        changed = true;
+    }
+    auto relativeTopStory = GetOptionalDouble (details, "relativeTopStory");
+    if (relativeTopStory.HasValue ()) {
+        element.wall.relativeTopStory = static_cast<short> (relativeTopStory.Get ());
+        ACAPI_ELEMENT_MASK_SET (mask, API_WallType, relativeTopStory);
+        changed = true;
+    }
+    GS::UniString zoneRelStr;
+    if (details.Get ("zoneRel", zoneRelStr)) {
+        element.wall.zoneRel = ZoneRelFromString (zoneRelStr);
+        ACAPI_ELEMENT_MASK_SET (mask, API_WallType, zoneRel);
+        changed = true;
+    }
+    GS::ObjectState visibilityOs;
+    if (details.Get ("visibility", visibilityOs)) {
+        element.wall.visibility = GetStoryVisibilityFromObjectState (visibilityOs);
+        ACAPI_ELEMENT_MASK_SET (mask, API_WallType, visibility);
+        changed = true;
+    }
+    GS::ObjectState referenceMaterialOs;
+    if (details.Get ("referenceMaterial", referenceMaterialOs)) {
+        element.wall.refMat = GetOverriddenMaterialFromObjectState (referenceMaterialOs);
+        ACAPI_ELEMENT_MASK_SET (mask, API_WallType, refMat);
+        changed = true;
+    }
+    GS::ObjectState oppositeMaterialOs;
+    if (details.Get ("oppositeMaterial", oppositeMaterialOs)) {
+        element.wall.oppMat = GetOverriddenMaterialFromObjectState (oppositeMaterialOs);
+        ACAPI_ELEMENT_MASK_SET (mask, API_WallType, oppMat);
+        changed = true;
+    }
+    GS::ObjectState sideMaterialOs;
+    if (details.Get ("sideMaterial", sideMaterialOs)) {
+        element.wall.sidMat = GetOverriddenMaterialFromObjectState (sideMaterialOs);
+        ACAPI_ELEMENT_MASK_SET (mask, API_WallType, sidMat);
+        changed = true;
+    }
+#ifdef ServerMainVers_2700
+    GS::ObjectState cutFillPenOs;
+    if (details.Get ("cutFillPen", cutFillPenOs)) {
+        element.wall.cutFillPen = GetOverriddenPenFromObjectState (cutFillPenOs);
+        ACAPI_ELEMENT_MASK_SET (mask, API_WallType, cutFillPen);
+        changed = true;
+    }
+    GS::ObjectState cutFillBackgroundPenOs;
+    if (details.Get ("cutFillBackgroundPen", cutFillBackgroundPenOs)) {
+        element.wall.cutFillBackgroundPen = GetOverriddenPenFromObjectState (cutFillBackgroundPenOs);
+        ACAPI_ELEMENT_MASK_SET (mask, API_WallType, cutFillBackgroundPen);
+        changed = true;
+    }
+#endif
     return changed;
 }
 
@@ -1261,6 +1335,75 @@ bool ApplySlabDetails (API_Element& element, API_Element& mask, const GS::Object
         element.slab.level = floorIndexAndOffset.second;
         ACAPI_ELEMENT_MASK_SET (mask, API_Elem_Head, floorInd);
         ACAPI_ELEMENT_MASK_SET (mask, API_SlabType, level);
+        changed = true;
+    }
+
+    GS::UniString referencePlaneLocationStr;
+    if (details.Get ("referencePlaneLocation", referencePlaneLocationStr)) {
+        element.slab.referencePlaneLocation = SlabReferencePlaneLocationFromString (referencePlaneLocationStr);
+        ACAPI_ELEMENT_MASK_SET (mask, API_SlabType, referencePlaneLocation);
+        changed = true;
+    }
+
+    GS::ObjectState topMaterialOs;
+    if (details.Get ("topMaterial", topMaterialOs)) {
+        element.slab.topMat = GetOverriddenMaterialFromObjectState (topMaterialOs);
+        ACAPI_ELEMENT_MASK_SET (mask, API_SlabType, topMat);
+        changed = true;
+    }
+    GS::ObjectState sideMaterialOs;
+    if (details.Get ("sideMaterial", sideMaterialOs)) {
+        element.slab.sideMat = GetOverriddenMaterialFromObjectState (sideMaterialOs);
+        ACAPI_ELEMENT_MASK_SET (mask, API_SlabType, sideMat);
+        changed = true;
+    }
+    GS::ObjectState bottomMaterialOs;
+    if (details.Get ("bottomMaterial", bottomMaterialOs)) {
+        element.slab.botMat = GetOverriddenMaterialFromObjectState (bottomMaterialOs);
+        ACAPI_ELEMENT_MASK_SET (mask, API_SlabType, botMat);
+        changed = true;
+    }
+#ifdef ServerMainVers_2700
+    GS::ObjectState cutFillPenOs;
+    if (details.Get ("cutFillPen", cutFillPenOs)) {
+        element.slab.cutFillPen = GetOverriddenPenFromObjectState (cutFillPenOs);
+        ACAPI_ELEMENT_MASK_SET (mask, API_SlabType, cutFillPen);
+        changed = true;
+    }
+    GS::ObjectState cutFillBackgroundPenOs;
+    if (details.Get ("cutFillBackgroundPen", cutFillBackgroundPenOs)) {
+        element.slab.cutFillBackgroundPen = GetOverriddenPenFromObjectState (cutFillBackgroundPenOs);
+        ACAPI_ELEMENT_MASK_SET (mask, API_SlabType, cutFillBackgroundPen);
+        changed = true;
+    }
+#endif
+
+    GS::ObjectState floorFillOs;
+    if (details.Get ("floorFill", floorFillOs)) {
+        floorFillOs.Get ("use", element.slab.useFloorFill);
+        Int32 foregroundPen = 0;
+        if (floorFillOs.Get ("foregroundPen", foregroundPen)) {
+            element.slab.floorFillPen = static_cast<short> (foregroundPen);
+        }
+        Int32 backgroundPen = 0;
+        if (floorFillOs.Get ("backgroundPen", backgroundPen)) {
+            element.slab.floorFillBGPen = static_cast<short> (backgroundPen);
+        }
+        GS::ObjectState fillIdOs;
+        if (floorFillOs.Get ("fillId", fillIdOs)) {
+            element.slab.floorFillInd = GetAttributeIndexFromGuid (API_FilltypeID, GetGuidFromObjectState (fillIdOs));
+        }
+        floorFillOs.Get ("use3DHatching", element.slab.use3DHatching);
+        GS::ObjectState orientationOs;
+        if (floorFillOs.Get ("orientation", orientationOs)) {
+            element.slab.hatchOrientation = GetHatchOrientationFromObjectState (orientationOs);
+        }
+        ACAPI_ELEMENT_MASK_SET (mask, API_SlabType, useFloorFill);
+        ACAPI_ELEMENT_MASK_SET (mask, API_SlabType, floorFillPen);
+        ACAPI_ELEMENT_MASK_SET (mask, API_SlabType, floorFillBGPen);
+        ACAPI_ELEMENT_MASK_SET (mask, API_SlabType, floorFillInd);
+        ACAPI_ELEMENT_MASK_SET (mask, API_SlabType, use3DHatching);
+        ACAPI_ELEMENT_MASK_SET (mask, API_SlabType, hatchOrientation);
         changed = true;
     }
 
@@ -1347,6 +1490,97 @@ bool ApplyColumnDetails (API_Element& element, API_Element& mask, const GS::Obje
         ACAPI_ELEMENT_MASK_SET (mask, API_ColumnType, axisRotationAngle);
         changed = true;
     }
+    bool isSlanted = false;
+    if (details.Get ("isSlanted", isSlanted)) {
+        element.column.isSlanted = isSlanted;
+        ACAPI_ELEMENT_MASK_SET (mask, API_ColumnType, isSlanted);
+        changed = true;
+    }
+    auto slantAngle = GetOptionalDouble (details, "slantAngle");
+    if (slantAngle.HasValue ()) {
+        element.column.slantAngle = slantAngle.Get ();
+        ACAPI_ELEMENT_MASK_SET (mask, API_ColumnType, slantAngle);
+        changed = true;
+    }
+    auto slantDirectionAngle = GetOptionalDouble (details, "slantDirectionAngle");
+    if (slantDirectionAngle.HasValue ()) {
+        element.column.slantDirectionAngle = slantDirectionAngle.Get ();
+        ACAPI_ELEMENT_MASK_SET (mask, API_ColumnType, slantDirectionAngle);
+        changed = true;
+    }
+    bool isFlipped = false;
+    if (details.Get ("isFlipped", isFlipped)) {
+        element.column.isFlipped = isFlipped;
+        ACAPI_ELEMENT_MASK_SET (mask, API_ColumnType, isFlipped);
+        changed = true;
+    }
+    bool wrapping = false;
+    if (details.Get ("wrapping", wrapping)) {
+        element.column.wrapping = wrapping;
+        ACAPI_ELEMENT_MASK_SET (mask, API_ColumnType, wrapping);
+        changed = true;
+    }
+    auto topOffset = GetOptionalDouble (details, "topOffset");
+    if (topOffset.HasValue ()) {
+        element.column.topOffset = topOffset.Get ();
+        ACAPI_ELEMENT_MASK_SET (mask, API_ColumnType, topOffset);
+        changed = true;
+    }
+    auto relativeTopStory = GetOptionalDouble (details, "relativeTopStory");
+    if (relativeTopStory.HasValue ()) {
+        element.column.relativeTopStory = static_cast<short> (relativeTopStory.Get ());
+        ACAPI_ELEMENT_MASK_SET (mask, API_ColumnType, relativeTopStory);
+        changed = true;
+    }
+#ifdef ServerMainVers_2700
+    GS::ObjectState cutFillPenOs;
+    if (details.Get ("cutFillPen", cutFillPenOs)) {
+        element.column.cutFillPen = GetOverriddenPenFromObjectState (cutFillPenOs);
+        ACAPI_ELEMENT_MASK_SET (mask, API_ColumnType, cutFillPen);
+        changed = true;
+    }
+    GS::ObjectState cutFillBackgroundPenOs;
+    if (details.Get ("cutFillBackgroundPen", cutFillBackgroundPenOs)) {
+        element.column.cutFillBackgroundPen = GetOverriddenPenFromObjectState (cutFillBackgroundPenOs);
+        ACAPI_ELEMENT_MASK_SET (mask, API_ColumnType, cutFillBackgroundPen);
+        changed = true;
+    }
+#endif
+    GS::ObjectState coverFillOs;
+    if (details.Get ("coverFill", coverFillOs)) {
+        coverFillOs.Get ("use", element.column.useCoverFill);
+        coverFillOs.Get ("useFromSurface", element.column.useCoverFillFromSurface);
+        coverFillOs.Get ("orientationComesFrom3D", element.column.coverFillOrientationComesFrom3D);
+        GS::ObjectState fillIdOs;
+        if (coverFillOs.Get ("fillId", fillIdOs)) {
+            element.column.coverFillType = GetAttributeIndexFromGuid (API_FilltypeID, GetGuidFromObjectState (fillIdOs));
+        }
+        Int32 foregroundPen = 0;
+        if (coverFillOs.Get ("foregroundPen", foregroundPen)) {
+            element.column.coverFillForegroundPen = static_cast<short> (foregroundPen);
+        }
+        Int32 backgroundPen = 0;
+        if (coverFillOs.Get ("backgroundPen", backgroundPen)) {
+            element.column.coverFillBackgroundPen = static_cast<short> (backgroundPen);
+        }
+        GS::UniString transformationTypeStr;
+        if (coverFillOs.Get ("transformationType", transformationTypeStr)) {
+            element.column.coverFillTransformationType = CoverFillTransformationTypeFromString (transformationTypeStr);
+        }
+        GS::ObjectState transformationOs;
+        if (coverFillOs.Get ("transformation", transformationOs)) {
+            element.column.coverFillTransformation = GetCoverFillTransformationFromObjectState (transformationOs);
+        }
+        ACAPI_ELEMENT_MASK_SET (mask, API_ColumnType, useCoverFill);
+        ACAPI_ELEMENT_MASK_SET (mask, API_ColumnType, useCoverFillFromSurface);
+        ACAPI_ELEMENT_MASK_SET (mask, API_ColumnType, coverFillOrientationComesFrom3D);
+        ACAPI_ELEMENT_MASK_SET (mask, API_ColumnType, coverFillType);
+        ACAPI_ELEMENT_MASK_SET (mask, API_ColumnType, coverFillForegroundPen);
+        ACAPI_ELEMENT_MASK_SET (mask, API_ColumnType, coverFillBackgroundPen);
+        ACAPI_ELEMENT_MASK_SET (mask, API_ColumnType, coverFillTransformationType);
+        ACAPI_ELEMENT_MASK_SET (mask, API_ColumnType, coverFillTransformation);
+        changed = true;
+    }
     return changed;
 }
 
@@ -1393,6 +1627,91 @@ bool ApplyBeamDetails (API_Element& element, API_Element& mask, const GS::Object
     if (curveHeight.HasValue ()) {
         element.beam.verticalCurveHeight = curveHeight.Get ();
         ACAPI_ELEMENT_MASK_SET (mask, API_BeamType, verticalCurveHeight);
+        changed = true;
+    }
+    GS::UniString beamShapeStr;
+    if (details.Get ("beamShape", beamShapeStr)) {
+        if (beamShapeStr == "HorizontallyCurved") {
+            element.beam.beamShape = API_HorizontallyCurvedBeam;
+        } else if (beamShapeStr == "VerticallyCurved") {
+            element.beam.beamShape = API_VerticallyCurvedBeam;
+        } else {
+            element.beam.beamShape = API_StraightBeam;
+        }
+        ACAPI_ELEMENT_MASK_SET (mask, API_BeamType, beamShape);
+        changed = true;
+    }
+    bool isSlanted = false;
+    if (details.Get ("isSlanted", isSlanted)) {
+        element.beam.isSlanted = isSlanted;
+        ACAPI_ELEMENT_MASK_SET (mask, API_BeamType, isSlanted);
+        changed = true;
+    }
+    bool isFlipped = false;
+    if (details.Get ("isFlipped", isFlipped)) {
+        element.beam.isFlipped = isFlipped;
+        ACAPI_ELEMENT_MASK_SET (mask, API_BeamType, isFlipped);
+        changed = true;
+    }
+    auto profileAngle = GetOptionalDouble (details, "profileAngle");
+    if (profileAngle.HasValue ()) {
+        element.beam.profileAngle = profileAngle.Get ();
+        ACAPI_ELEMENT_MASK_SET (mask, API_BeamType, profileAngle);
+        changed = true;
+    }
+    GS::UniString anchorPointStr;
+    if (details.Get ("anchorPoint", anchorPointStr)) {
+        element.beam.anchorPoint = static_cast<short> (AnchorIdFromString (anchorPointStr));
+        ACAPI_ELEMENT_MASK_SET (mask, API_BeamType, anchorPoint);
+        changed = true;
+    }
+#ifdef ServerMainVers_2700
+    GS::ObjectState cutFillPenOs;
+    if (details.Get ("cutFillPen", cutFillPenOs)) {
+        element.beam.cutFillPen = GetOverriddenPenFromObjectState (cutFillPenOs);
+        ACAPI_ELEMENT_MASK_SET (mask, API_BeamType, cutFillPen);
+        changed = true;
+    }
+    GS::ObjectState cutFillBackgroundPenOs;
+    if (details.Get ("cutFillBackgroundPen", cutFillBackgroundPenOs)) {
+        element.beam.cutFillBackgroundPen = GetOverriddenPenFromObjectState (cutFillBackgroundPenOs);
+        ACAPI_ELEMENT_MASK_SET (mask, API_BeamType, cutFillBackgroundPen);
+        changed = true;
+    }
+#endif
+    GS::ObjectState coverFillOs;
+    if (details.Get ("coverFill", coverFillOs)) {
+        coverFillOs.Get ("use", element.beam.useCoverFill);
+        coverFillOs.Get ("useFromSurface", element.beam.useCoverFillFromSurface);
+        coverFillOs.Get ("orientationComesFrom3D", element.beam.coverFillOrientationComesFrom3D);
+        GS::ObjectState fillIdOs;
+        if (coverFillOs.Get ("fillId", fillIdOs)) {
+            element.beam.coverFillType = GetAttributeIndexFromGuid (API_FilltypeID, GetGuidFromObjectState (fillIdOs));
+        }
+        Int32 foregroundPen = 0;
+        if (coverFillOs.Get ("foregroundPen", foregroundPen)) {
+            element.beam.coverFillForegroundPen = static_cast<short> (foregroundPen);
+        }
+        Int32 backgroundPen = 0;
+        if (coverFillOs.Get ("backgroundPen", backgroundPen)) {
+            element.beam.coverFillBackgroundPen = static_cast<short> (backgroundPen);
+        }
+        GS::UniString transformationTypeStr;
+        if (coverFillOs.Get ("transformationType", transformationTypeStr)) {
+            element.beam.coverFillTransformationType = CoverFillTransformationTypeFromString (transformationTypeStr);
+        }
+        GS::ObjectState transformationOs;
+        if (coverFillOs.Get ("transformation", transformationOs)) {
+            element.beam.coverFillTransformation = GetCoverFillTransformationFromObjectState (transformationOs);
+        }
+        ACAPI_ELEMENT_MASK_SET (mask, API_BeamType, useCoverFill);
+        ACAPI_ELEMENT_MASK_SET (mask, API_BeamType, useCoverFillFromSurface);
+        ACAPI_ELEMENT_MASK_SET (mask, API_BeamType, coverFillOrientationComesFrom3D);
+        ACAPI_ELEMENT_MASK_SET (mask, API_BeamType, coverFillType);
+        ACAPI_ELEMENT_MASK_SET (mask, API_BeamType, coverFillForegroundPen);
+        ACAPI_ELEMENT_MASK_SET (mask, API_BeamType, coverFillBackgroundPen);
+        ACAPI_ELEMENT_MASK_SET (mask, API_BeamType, coverFillTransformationType);
+        ACAPI_ELEMENT_MASK_SET (mask, API_BeamType, coverFillTransformation);
         changed = true;
     }
     return changed;
@@ -3021,7 +3340,25 @@ GS::Optional<GS::UniString> ModifyWallsCommand::GetInputParametersSchema () cons
                         },
                         "buildingMaterialId": { "$ref": "#/AttributeId" },
                         "compositeId": { "$ref": "#/AttributeId" },
-                        "profileId": { "$ref": "#/AttributeId" }
+                        "profileId": { "$ref": "#/AttributeId" },
+                        "referenceLineLocation": {
+                            "type": "string",
+                            "enum": ["Outside", "Center", "Inside", "CoreOutside", "CoreCenter", "CoreInside"]
+                        },
+                        "slantAlpha": { "type": "number" },
+                        "slantBeta": { "type": "number" },
+                        "topOffset": { "type": "number" },
+                        "relativeTopStory": { "type": "number" },
+                        "zoneRel": {
+                            "type": "string",
+                            "enum": ["Boundary", "ReduceArea", "None", "SubtractFromZone"]
+                        },
+                        "visibility": { "$ref": "#/StoryVisibility" },
+                        "referenceMaterial": { "$ref": "#/OverriddenMaterial" },
+                        "oppositeMaterial": { "$ref": "#/OverriddenMaterial" },
+                        "sideMaterial": { "$ref": "#/OverriddenMaterial" },
+                        "cutFillPen": { "$ref": "#/OverriddenPen" },
+                        "cutFillBackgroundPen": { "$ref": "#/OverriddenPen" }
                     },
                     "additionalProperties": false,
                     "required": ["elementId"]
@@ -3106,7 +3443,32 @@ GS::Optional<GS::UniString> ModifyBeamsCommand::GetInputParametersSchema () cons
                         "offset": { "type": "number" },
                         "slantAngle": { "type": "number" },
                         "arcAngle": { "type": "number" },
-                        "verticalCurveHeight": { "type": "number" }
+                        "verticalCurveHeight": { "type": "number" },
+                        "beamShape": { "type": "string", "enum": ["Straight", "HorizontallyCurved", "VerticallyCurved"] },
+                        "isSlanted": { "type": "boolean" },
+                        "isFlipped": { "type": "boolean" },
+                        "profileAngle": { "type": "number" },
+                        "anchorPoint": { "type": "string", "enum": ["TopLeft", "TopCenter", "TopRight", "MiddleLeft", "Center", "MiddleRight", "BottomLeft", "BottomCenter", "BottomRight"] },
+                        "holes": {
+                            "type": "array",
+                            "description": "Replaces all holes currently placed on the beam.",
+                            "items": {
+                                "type": "object",
+                                "properties": {
+                                    "type": { "type": "string", "enum": ["Rectangular", "Circular"] },
+                                    "showContour": { "type": "boolean" },
+                                    "centerX": { "type": "number" },
+                                    "centerZ": { "type": "number" },
+                                    "width": { "type": "number", "exclusiveMinimum": 0.0 },
+                                    "height": { "type": "number", "exclusiveMinimum": 0.0, "description": "Only used for the Rectangular type." }
+                                },
+                                "additionalProperties": false,
+                                "required": ["type", "centerX", "centerZ", "width"]
+                            }
+                        },
+                        "cutFillPen": { "$ref": "#/OverriddenPen" },
+                        "cutFillBackgroundPen": { "$ref": "#/OverriddenPen" },
+                        "coverFill": { "$ref": "#/CoverFill" }
                     },
                     "additionalProperties": false,
                     "required": ["elementId"]
@@ -3147,7 +3509,38 @@ GS::ObjectState ModifyBeamsCommand::Execute (const GS::ObjectState& parameters, 
 
             API_Element mask = {};
             ACAPI_ELEMENT_MASK_CLEAR (mask);
-            const bool changed = ApplyBeamDetails (element, mask, item);
+            bool changed = ApplyBeamDetails (element, mask, item);
+
+            GS::Array<GS::ObjectState> holes;
+            if (item.Get ("holes", holes)) {
+                API_ElementMemo memo = {};
+                const GS::OnExit cleanup ([&]() { ACAPI_DisposeElemMemoHdls (&memo); });
+                const GSSize nHoles = holes.GetSize ();
+                memo.beamHoles = reinterpret_cast<API_Beam_Hole**> (BMAllocateHandle (GS::Max<GSSize> (nHoles, 1) * sizeof (API_Beam_Hole), ALLOCATE_CLEAR, 0));
+                if (memo.beamHoles == nullptr) {
+                    results.Push (CreateFailedExecutionResult (APIERR_MEMFULL, "Failed to allocate memory for beam holes."));
+                    continue;
+                }
+                for (GSIndex i = 0; i < nHoles; ++i) {
+                    const GS::ObjectState& holeOs = holes[i];
+                    API_Beam_Hole& hole = (*memo.beamHoles)[i];
+                    hole = {};
+                    hole.holeID = static_cast<Int32> (i + 1);
+                    GS::UniString typeStr;
+                    holeOs.Get ("type", typeStr);
+                    hole.holeType = (typeStr == "Circular") ? APIBHole_Circular : APIBHole_Rectangular;
+                    holeOs.Get ("showContour", hole.holeContureOn);
+                    holeOs.Get ("centerX", hole.centerx);
+                    holeOs.Get ("centerZ", hole.centerz);
+                    holeOs.Get ("width", hole.width);
+                    holeOs.Get ("height", hole.height);
+                }
+
+                err = ACAPI_Element_Change (&element, &mask, &memo, APIMemoMask_BeamHole, true);
+                results.Push (err == NoError ? CreateSuccessfulExecutionResult () : CreateFailedExecutionResult (err, "Failed to modify beam holes."));
+                continue;
+            }
+
             if (!changed) {
                 results.Push (CreateFailedExecutionResult (APIERR_BADPARS, "No beam fields to modify."));
                 continue;
@@ -3188,6 +3581,10 @@ GS::Optional<GS::UniString> ModifySlabsCommand::GetInputParametersSchema () cons
                         },
                         "buildingMaterialId": { "$ref": "#/AttributeId" },
                         "compositeId": { "$ref": "#/AttributeId" },
+                        "referencePlaneLocation": {
+                            "type": "string",
+                            "enum": ["Top", "CoreTop", "CoreBottom", "Bottom"]
+                        },
                         "polygonOutline": {
                             "type": "array",
                             "items": { "$ref": "#/Coordinate2D" },
@@ -3197,7 +3594,13 @@ GS::Optional<GS::UniString> ModifySlabsCommand::GetInputParametersSchema () cons
                             "type": "array",
                             "items": { "$ref": "#/PolyArc" }
                         },
-                        "holes": { "$ref": "#/Holes2D" }
+                        "holes": { "$ref": "#/Holes2D" },
+                        "topMaterial": { "$ref": "#/OverriddenMaterial" },
+                        "sideMaterial": { "$ref": "#/OverriddenMaterial" },
+                        "bottomMaterial": { "$ref": "#/OverriddenMaterial" },
+                        "cutFillPen": { "$ref": "#/OverriddenPen" },
+                        "cutFillBackgroundPen": { "$ref": "#/OverriddenPen" },
+                        "floorFill": { "$ref": "#/FloorFill" }
                     },
                     "additionalProperties": false,
                     "required": ["elementId"]
@@ -3601,7 +4004,17 @@ GS::Optional<GS::UniString> ModifyColumnsCommand::GetInputParametersSchema () co
                         "zCoordinate": { "type": "number" },
                         "height": { "type": "number", "exclusiveMinimum": 0.0 },
                         "bottomOffset": { "type": "number" },
-                        "axisRotationAngle": { "type": "number" }
+                        "axisRotationAngle": { "type": "number" },
+                        "isSlanted": { "type": "boolean" },
+                        "slantAngle": { "type": "number" },
+                        "slantDirectionAngle": { "type": "number" },
+                        "isFlipped": { "type": "boolean" },
+                        "wrapping": { "type": "boolean" },
+                        "topOffset": { "type": "number" },
+                        "relativeTopStory": { "type": "number" },
+                        "cutFillPen": { "$ref": "#/OverriddenPen" },
+                        "cutFillBackgroundPen": { "$ref": "#/OverriddenPen" },
+                        "coverFill": { "$ref": "#/CoverFill" }
                     },
                     "additionalProperties": false,
                     "required": ["elementId"]

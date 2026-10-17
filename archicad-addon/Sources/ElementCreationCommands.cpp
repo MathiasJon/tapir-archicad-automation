@@ -682,6 +682,460 @@ GS::Optional<GS::ObjectState> CreatePolylinesCommand::SetTypeSpecificParameters 
     return {};
 }
 
+CreateLinesCommand::CreateLinesCommand () :
+    CreateElementsCommandBase ("CreateLines", API_LineID, "linesData")
+{
+}
+
+GS::Optional<GS::UniString> CreateLinesCommand::GetInputParametersSchema () const
+{
+    return R"({
+    "type": "object",
+    "properties": {
+        "linesData": {
+            "type": "array",
+            "description": "Array of data to create Lines.",
+            "items": {
+                "type": "object",
+                "description": "The parameters of the new Line.",
+                "properties": {
+                    "floorInd": {
+                        "type": "number",
+                        "description": "The identifier of the floor. Optional parameter, by default the current floor is used."
+                    },
+                    "layerIndex": {
+                        "type": "integer",
+                        "description": "Layer attribute index to place the line on. Optional parameter, by default the current layer is used."
+                    },
+                    "begCoordinate": {
+                        "$ref": "#/Coordinate2D"
+                    },
+                    "endCoordinate": {
+                        "$ref": "#/Coordinate2D"
+                    }
+                },
+                "additionalProperties": false,
+                "required": [
+                    "begCoordinate",
+                    "endCoordinate"
+                ]
+            }
+        }
+    },
+    "additionalProperties": false,
+    "required": [
+        "linesData"
+    ]
+})";
+}
+
+GS::Optional<GS::ObjectState> CreateLinesCommand::SetTypeSpecificParameters (API_Element& element, API_ElementMemo& /*memo*/, const Stories& /*stories*/, const GS::ObjectState& parameters) const
+{
+    parameters.Get ("floorInd", element.header.floorInd);
+
+    Int32 layerIndex = 0;
+    if (parameters.Get ("layerIndex", layerIndex) && layerIndex > 0) {
+        element.header.layer = ACAPI_CreateAttributeIndex (layerIndex);
+    }
+
+    GS::ObjectState begCoordinate;
+    parameters.Get ("begCoordinate", begCoordinate);
+    element.line.begC = Get2DCoordinateFromObjectState (begCoordinate);
+
+    GS::ObjectState endCoordinate;
+    parameters.Get ("endCoordinate", endCoordinate);
+    element.line.endC = Get2DCoordinateFromObjectState (endCoordinate);
+
+    return {};
+}
+
+CreateArcsCommand::CreateArcsCommand () :
+    CreateElementsCommandBase ("CreateArcs", API_ArcID, "arcsData")
+{
+}
+
+GS::Optional<GS::UniString> CreateArcsCommand::GetInputParametersSchema () const
+{
+    return R"({
+    "type": "object",
+    "properties": {
+        "arcsData": {
+            "type": "array",
+            "description": "Array of data to create Arcs.",
+            "items": {
+                "type": "object",
+                "description": "The parameters of the new Arc.",
+                "properties": {
+                    "floorInd": {
+                        "type": "number",
+                        "description": "The identifier of the floor. Optional parameter, by default the current floor is used."
+                    },
+                    "layerIndex": {
+                        "type": "integer",
+                        "description": "Layer attribute index to place the arc on. Optional parameter, by default the current layer is used."
+                    },
+                    "origin": {
+                        "$ref": "#/Coordinate2D"
+                    },
+                    "radius": {
+                        "type": "number"
+                    },
+                    "begAngle": {
+                        "type": "number",
+                        "description": "Beginning angle of the arc in radians."
+                    },
+                    "endAngle": {
+                        "type": "number",
+                        "description": "End angle of the arc in radians."
+                    }
+                },
+                "additionalProperties": false,
+                "required": [
+                    "origin",
+                    "radius",
+                    "begAngle",
+                    "endAngle"
+                ]
+            }
+        }
+    },
+    "additionalProperties": false,
+    "required": [
+        "arcsData"
+    ]
+})";
+}
+
+GS::Optional<GS::ObjectState> CreateArcsCommand::SetTypeSpecificParameters (API_Element& element, API_ElementMemo& /*memo*/, const Stories& /*stories*/, const GS::ObjectState& parameters) const
+{
+    parameters.Get ("floorInd", element.header.floorInd);
+
+    Int32 layerIndex = 0;
+    if (parameters.Get ("layerIndex", layerIndex) && layerIndex > 0) {
+        element.header.layer = ACAPI_CreateAttributeIndex (layerIndex);
+    }
+
+    GS::ObjectState origin;
+    parameters.Get ("origin", origin);
+    element.arc.origC = Get2DCoordinateFromObjectState (origin);
+
+    parameters.Get ("radius", element.arc.r);
+    element.arc.angle = 0.0;
+    element.arc.ratio = 1.0;
+    parameters.Get ("begAngle", element.arc.begAng);
+    parameters.Get ("endAngle", element.arc.endAng);
+
+    return {};
+}
+
+CreateCirclesCommand::CreateCirclesCommand () :
+    CreateElementsCommandBase ("CreateCircles", API_CircleID, "circlesData")
+{
+}
+
+GS::Optional<GS::UniString> CreateCirclesCommand::GetInputParametersSchema () const
+{
+    return R"({
+    "type": "object",
+    "properties": {
+        "circlesData": {
+            "type": "array",
+            "description": "Array of data to create Circles.",
+            "items": {
+                "type": "object",
+                "description": "The parameters of the new Circle.",
+                "properties": {
+                    "floorInd": {
+                        "type": "number",
+                        "description": "The identifier of the floor. Optional parameter, by default the current floor is used."
+                    },
+                    "layerIndex": {
+                        "type": "integer",
+                        "description": "Layer attribute index to place the circle on. Optional parameter, by default the current layer is used."
+                    },
+                    "origin": {
+                        "$ref": "#/Coordinate2D"
+                    },
+                    "radius": {
+                        "type": "number"
+                    }
+                },
+                "additionalProperties": false,
+                "required": [
+                    "origin",
+                    "radius"
+                ]
+            }
+        }
+    },
+    "additionalProperties": false,
+    "required": [
+        "circlesData"
+    ]
+})";
+}
+
+GS::Optional<GS::ObjectState> CreateCirclesCommand::SetTypeSpecificParameters (API_Element& element, API_ElementMemo& /*memo*/, const Stories& /*stories*/, const GS::ObjectState& parameters) const
+{
+    parameters.Get ("floorInd", element.header.floorInd);
+
+    Int32 layerIndex = 0;
+    if (parameters.Get ("layerIndex", layerIndex) && layerIndex > 0) {
+        element.header.layer = ACAPI_CreateAttributeIndex (layerIndex);
+    }
+
+    GS::ObjectState origin;
+    parameters.Get ("origin", origin);
+    element.circle.origC = Get2DCoordinateFromObjectState (origin);
+
+    parameters.Get ("radius", element.circle.r);
+    element.circle.angle = 0.0;
+    element.circle.ratio = 1.0;
+
+    return {};
+}
+
+CreateHotspotsCommand::CreateHotspotsCommand () :
+    CreateElementsCommandBase ("CreateHotspots", API_HotspotID, "hotspotsData")
+{
+}
+
+GS::Optional<GS::UniString> CreateHotspotsCommand::GetInputParametersSchema () const
+{
+    return R"({
+    "type": "object",
+    "properties": {
+        "hotspotsData": {
+            "type": "array",
+            "description": "Array of data to create Hotspots.",
+            "items": {
+                "type": "object",
+                "description": "The parameters of the new Hotspot.",
+                "properties": {
+                    "floorInd": {
+                        "type": "number",
+                        "description": "The identifier of the floor. Optional parameter, by default the current floor is used."
+                    },
+                    "layerIndex": {
+                        "type": "integer",
+                        "description": "Layer attribute index to place the hotspot on. Optional parameter, by default the current layer is used."
+                    },
+                    "position": {
+                        "$ref": "#/Coordinate2D"
+                    },
+                    "height": {
+                        "type": "number"
+                    }
+                },
+                "additionalProperties": false,
+                "required": [
+                    "position"
+                ]
+            }
+        }
+    },
+    "additionalProperties": false,
+    "required": [
+        "hotspotsData"
+    ]
+})";
+}
+
+GS::Optional<GS::ObjectState> CreateHotspotsCommand::SetTypeSpecificParameters (API_Element& element, API_ElementMemo& /*memo*/, const Stories& /*stories*/, const GS::ObjectState& parameters) const
+{
+    parameters.Get ("floorInd", element.header.floorInd);
+
+    Int32 layerIndex = 0;
+    if (parameters.Get ("layerIndex", layerIndex) && layerIndex > 0) {
+        element.header.layer = ACAPI_CreateAttributeIndex (layerIndex);
+    }
+
+    GS::ObjectState position;
+    parameters.Get ("position", position);
+    element.hotspot.pos = Get2DCoordinateFromObjectState (position);
+
+    parameters.Get ("height", element.hotspot.height);
+
+    return {};
+}
+
+CreateHatchesCommand::CreateHatchesCommand () :
+    CreateElementsCommandBase ("CreateHatches", API_HatchID, "hatchesData")
+{
+}
+
+GS::Optional<GS::UniString> CreateHatchesCommand::GetInputParametersSchema () const
+{
+    return R"({
+    "type": "object",
+    "properties": {
+        "hatchesData": {
+            "type": "array",
+            "description": "Array of data to create Hatches.",
+            "items": {
+                "type": "object",
+                "description": "The parameters of the new Hatch.",
+                "properties": {
+                    "floorInd": {
+                        "type": "number",
+                        "description": "The identifier of the floor. Optional parameter, by default the current floor is used."
+                    },
+                    "layerIndex": {
+                        "type": "integer",
+                        "description": "Layer attribute index to place the hatch on. Optional parameter, by default the current layer is used."
+                    },
+                    "coordinates": {
+                        "type": "array",
+                        "description": "The 2D coordinates of the hatch outline (single contour, no holes). Do not repeat the first point at the end.",
+                        "items": {
+                            "$ref": "#/Coordinate2D"
+                        },
+                        "minItems": 3
+                    },
+                    "arcs": {
+                        "type": "array",
+                        "description": "The arcs of the hatch outline.",
+                        "items": {
+                            "$ref": "#/PolyArc"
+                        }
+                    }
+                },
+                "additionalProperties": false,
+                "required": [
+                    "coordinates"
+                ]
+            }
+        }
+    },
+    "additionalProperties": false,
+    "required": [
+        "hatchesData"
+    ]
+})";
+}
+
+GS::Optional<GS::ObjectState> CreateHatchesCommand::SetTypeSpecificParameters (API_Element& element, API_ElementMemo& memo, const Stories& /*stories*/, const GS::ObjectState& parameters) const
+{
+    parameters.Get ("floorInd", element.header.floorInd);
+
+    Int32 layerIndex = 0;
+    if (parameters.Get ("layerIndex", layerIndex) && layerIndex > 0) {
+        element.header.layer = ACAPI_CreateAttributeIndex (layerIndex);
+    }
+
+    GS::Array<GS::ObjectState> coordinates;
+    GS::Array<GS::ObjectState> arcs;
+    parameters.Get ("coordinates", coordinates);
+    parameters.Get ("arcs", arcs);
+    const GS::Array<API_PolyArc> polyArcs = GetPolyArcs (arcs, 1);
+
+    const Int32 nUnique = (Int32) coordinates.GetSize ();
+    const Int32 nCoords = nUnique + 1; // + closing duplicate vertex (Hatch is a closed polygon)
+
+    memo.coords    = reinterpret_cast<API_Coord**>   (BMAllocateHandle ((nCoords + 1) * sizeof (API_Coord), ALLOCATE_CLEAR, 0));
+    memo.pends     = reinterpret_cast<Int32**>       (BMAllocateHandle (2 * sizeof (Int32), ALLOCATE_CLEAR, 0));
+    memo.parcs     = reinterpret_cast<API_PolyArc**> (BMAllocateHandle (polyArcs.GetSize () * sizeof (API_PolyArc), ALLOCATE_CLEAR, 0));
+    memo.vertexIDs = reinterpret_cast<UInt32**>      (BMAllocateHandle ((nCoords + 1) * sizeof (UInt32), ALLOCATE_CLEAR, 0));
+    if (memo.coords != nullptr && memo.pends != nullptr && memo.vertexIDs != nullptr) {
+        (*memo.coords)[0] = { 0.0, 0.0 };
+        (*memo.vertexIDs)[0] = (UInt32) nUnique;
+        for (Int32 i = 0; i < nUnique; ++i) {
+            (*memo.coords)[i + 1] = Get2DCoordinateFromObjectState (coordinates[i]);
+            (*memo.vertexIDs)[i + 1] = (UInt32) (i + 1);
+        }
+        (*memo.coords)[nCoords] = (*memo.coords)[1];
+        (*memo.vertexIDs)[nCoords] = (*memo.vertexIDs)[1];
+        (*memo.pends)[0] = 0;
+        (*memo.pends)[1] = nCoords;
+        Int32 iArc = 0;
+        for (const API_PolyArc& a : polyArcs)
+            (*memo.parcs)[iArc++] = a;
+
+        element.hatch.poly.nCoords   = nCoords;
+        element.hatch.poly.nSubPolys = 1;
+        element.hatch.poly.nArcs     = (Int32) polyArcs.GetSize ();
+    }
+
+    return {};
+}
+
+CreateSplinesCommand::CreateSplinesCommand () :
+    CreateElementsCommandBase ("CreateSplines", API_SplineID, "splinesData")
+{
+}
+
+GS::Optional<GS::UniString> CreateSplinesCommand::GetInputParametersSchema () const
+{
+    return R"({
+    "type": "object",
+    "properties": {
+        "splinesData": {
+            "type": "array",
+            "description": "Array of data to create Splines. Only auto-smoothed curves are supported (bezier handle positions are calculated automatically by Archicad from the point positions).",
+            "items": {
+                "type": "object",
+                "description": "The parameters of the new Spline.",
+                "properties": {
+                    "floorInd": {
+                        "type": "number",
+                        "description": "The identifier of the floor. Optional parameter, by default the current floor is used."
+                    },
+                    "layerIndex": {
+                        "type": "integer",
+                        "description": "Layer attribute index to place the spline on. Optional parameter, by default the current layer is used."
+                    },
+                    "coordinates": {
+                        "type": "array",
+                        "description": "The 2D coordinates of the spline points. Do not repeat the first point at the end even for a closed spline.",
+                        "items": {
+                            "$ref": "#/Coordinate2D"
+                        },
+                        "minItems": 3
+                    },
+                    "closed": {
+                        "type": "boolean",
+                        "description": "Is this a closed curve? Optional, defaults to false."
+                    }
+                },
+                "additionalProperties": false,
+                "required": [
+                    "coordinates"
+                ]
+            }
+        }
+    },
+    "additionalProperties": false,
+    "required": [
+        "splinesData"
+    ]
+})";
+}
+
+GS::Optional<GS::ObjectState> CreateSplinesCommand::SetTypeSpecificParameters (API_Element& element, API_ElementMemo& memo, const Stories& /*stories*/, const GS::ObjectState& parameters) const
+{
+    parameters.Get ("floorInd", element.header.floorInd);
+
+    Int32 layerIndex = 0;
+    if (parameters.Get ("layerIndex", layerIndex) && layerIndex > 0) {
+        element.header.layer = ACAPI_CreateAttributeIndex (layerIndex);
+    }
+
+    GS::Array<GS::ObjectState> coordinates;
+    parameters.Get ("coordinates", coordinates);
+    parameters.Get ("closed", element.spline.closed);
+    element.spline.autoSmooth = true; // bezierDirs handle-editing not supported by this command
+
+    const Int32 nPoints = (Int32) coordinates.GetSize ();
+    memo.coords = reinterpret_cast<API_Coord**> (BMAllocateHandle (nPoints * sizeof (API_Coord), ALLOCATE_CLEAR, 0));
+    if (memo.coords != nullptr) {
+        for (Int32 i = 0; i < nPoints; ++i) {
+            (*memo.coords)[i] = Get2DCoordinateFromObjectState (coordinates[i]);
+        }
+    }
+
+    return {};
+}
+
 // Shared schema builder for CreateObjects and CreateLamps.
 //
 // API_LampType is a typedef alias of API_ObjectType in APIdefs_Elements.h

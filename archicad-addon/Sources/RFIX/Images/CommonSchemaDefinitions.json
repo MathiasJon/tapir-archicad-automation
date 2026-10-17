@@ -476,6 +476,184 @@
             "arcAngle"
         ]
     },
+    "StoryVisibility": {
+        "type": "object",
+        "description": "Defines on which stories an element is displayed.",
+        "properties": {
+            "showOnHome": {
+                "type": "boolean",
+                "description": "Show the element on its own story only."
+            },
+            "showAllAbove": {
+                "type": "boolean",
+                "description": "Show the element on all stories above its own story."
+            },
+            "showAllBelow": {
+                "type": "boolean",
+                "description": "Show the element on all stories below its own story."
+            },
+            "showRelAbove": {
+                "type": "integer",
+                "description": "Show the element on this many stories above its own story."
+            },
+            "showRelBelow": {
+                "type": "integer",
+                "description": "Show the element on this many stories below its own story."
+            }
+        },
+        "additionalProperties": false,
+        "required": ["showOnHome", "showAllAbove", "showAllBelow", "showRelAbove", "showRelBelow"]
+    },
+    "OverriddenPen": {
+        "type": "object",
+        "description": "A pen index that may override the one inherited from the element's structure. On Archicad versions where the underlying element does not support this override, 'overridden' is always false.",
+        "properties": {
+            "overridden": {
+                "type": "boolean",
+                "description": "True if the pen is overridden on the element level."
+            },
+            "penIndex": {
+                "type": "integer"
+            }
+        },
+        "additionalProperties": false,
+        "required": ["overridden"]
+    },
+    "OverriddenMaterial": {
+        "type": "object",
+        "description": "A surface material that may override the one inherited from the element's structure (building material, composite or profile).",
+        "properties": {
+            "overridden": {
+                "type": "boolean",
+                "description": "True if the material is overridden on the element level."
+            },
+            "attributeId": {
+                "$ref": "#/AttributeId"
+            }
+        },
+        "additionalProperties": false,
+        "required": ["overridden"]
+    },
+    "CoverFillTransformation": {
+        "type": "object",
+        "description": "Orientation and distortion parameters of a cover fill.",
+        "properties": {
+            "origin": {
+                "$ref": "#/Coordinate2D",
+                "description": "The origin of the fill relative to the center of the element."
+            },
+            "xAxis": {
+                "$ref": "#/Coordinate2D",
+                "description": "Primary distortion (direction) vector."
+            },
+            "yAxis": {
+                "$ref": "#/Coordinate2D",
+                "description": "Secondary distortion (direction) vector."
+            }
+        },
+        "additionalProperties": false,
+        "required": ["origin", "xAxis", "yAxis"]
+    },
+    "CoverFill": {
+        "type": "object",
+        "description": "Floor plan cover fill settings of a Column or Beam.",
+        "properties": {
+            "use": {
+                "type": "boolean",
+                "description": "Whether the cover fill is shown on the floor plan."
+            },
+            "useFromSurface": {
+                "type": "boolean",
+                "description": "Whether the fill is taken from the top surface material of the element."
+            },
+            "orientationComesFrom3D": {
+                "type": "boolean",
+                "description": "Whether the cover fill orientation comes from the 3D view of the element."
+            },
+            "fillId": {
+                "$ref": "#/AttributeId"
+            },
+            "foregroundPen": {
+                "type": "integer"
+            },
+            "backgroundPen": {
+                "type": "integer"
+            },
+            "transformationType": {
+                "type": "string",
+                "enum": ["Global", "Rotated", "Distorted"]
+            },
+            "transformation": {
+                "$ref": "#/CoverFillTransformation"
+            }
+        },
+        "additionalProperties": false,
+        "required": ["use", "useFromSurface", "orientationComesFrom3D", "fillId", "foregroundPen", "backgroundPen", "transformationType", "transformation"]
+    },
+    "HatchOrientation": {
+        "type": "object",
+        "description": "Orientation and distortion parameters of a fill.",
+        "properties": {
+            "type": {
+                "type": "string",
+                "enum": ["Global", "Rotated", "Distorted", "Centered"]
+            },
+            "origin": {
+                "$ref": "#/Coordinate2D",
+                "description": "The origin of the fill relative to the project origin."
+            },
+            "matrix00": {
+                "type": "number",
+                "description": "X component of the primary distortion (direction) vector."
+            },
+            "matrix10": {
+                "type": "number",
+                "description": "Y component of the primary distortion (direction) vector."
+            },
+            "matrix01": {
+                "type": "number",
+                "description": "X component of the secondary distortion vector."
+            },
+            "matrix11": {
+                "type": "number",
+                "description": "Y component of the secondary distortion vector."
+            },
+            "innerRadius": {
+                "type": "number",
+                "description": "Radius for circular fill distortion, used when type is Centered."
+            }
+        },
+        "additionalProperties": false,
+        "required": ["type", "origin", "matrix00", "matrix10", "matrix01", "matrix11", "innerRadius"]
+    },
+    "FloorFill": {
+        "type": "object",
+        "description": "Floor plan cover fill settings of a Slab.",
+        "properties": {
+            "use": {
+                "type": "boolean",
+                "description": "Whether the cover fill is shown on the floor plan."
+            },
+            "foregroundPen": {
+                "type": "integer"
+            },
+            "backgroundPen": {
+                "type": "integer"
+            },
+            "fillId": {
+                "$ref": "#/AttributeId"
+            },
+            "use3DHatching": {
+                "type": "boolean",
+                "description": "Use Vectorial 3D Hatch patterns in Floor Plan view, taken from the top side material."
+            },
+            "orientation": {
+                "$ref": "#/HatchOrientation"
+            }
+        },
+        "additionalProperties": false,
+        "required": ["use", "foregroundPen", "backgroundPen", "fillId", "use3DHatching", "orientation"]
+    },
     "Coordinate2D": {
         "type": "object",
         "description": "2D coordinate.",
@@ -2821,6 +2999,52 @@
             },
             "profileId": {
                 "$ref": "#/AttributeId"
+            },
+            "referenceLineLocation": {
+                "type": "string",
+                "description": "The location of the wall's reference line. Not used by profiled walls (reference line always through their origin); polygonal/complex walls always use Outside.",
+                "enum": ["Outside", "Center", "Inside", "CoreOutside", "CoreCenter", "CoreInside"]
+            },
+            "slantAlpha": {
+                "type": "number",
+                "description": "The angle for slanted and double slanted walls, in radians."
+            },
+            "slantBeta": {
+                "type": "number",
+                "description": "The angle for double slanted walls, in radians."
+            },
+            "topOffset": {
+                "type": "number",
+                "description": "The offset from the top floor if the wall is top-linked."
+            },
+            "relativeTopStory": {
+                "type": "number",
+                "description": "The top-linked story, relative to the home story. 0 means not top-linked."
+            },
+            "zoneRel": {
+                "type": "string",
+                "enum": ["Boundary", "ReduceArea", "None", "SubtractFromZone"]
+            },
+            "visibility": {
+                "$ref": "#/StoryVisibility"
+            },
+            "referenceMaterial": {
+                "$ref": "#/OverriddenMaterial",
+                "description": "Material override of the surface on the reference line side."
+            },
+            "oppositeMaterial": {
+                "$ref": "#/OverriddenMaterial",
+                "description": "Material override of the opposite surface."
+            },
+            "sideMaterial": {
+                "$ref": "#/OverriddenMaterial",
+                "description": "Material override of the side surfaces."
+            },
+            "cutFillPen": {
+                "$ref": "#/OverriddenPen"
+            },
+            "cutFillBackgroundPen": {
+                "$ref": "#/OverriddenPen"
             }
         },
         "additionalProperties": false,
@@ -2831,7 +3055,19 @@
             "zCoordinate",
             "height",
             "bottomOffset",
-            "offset"
+            "offset",
+            "referenceLineLocation",
+            "slantAlpha",
+            "slantBeta",
+            "topOffset",
+            "relativeTopStory",
+            "zoneRel",
+            "visibility",
+            "referenceMaterial",
+            "oppositeMaterial",
+            "sideMaterial",
+            "cutFillPen",
+            "cutFillBackgroundPen"
         ]
     },
     "BeamDetails": {
@@ -2865,6 +3101,75 @@
             "verticalCurveHeight": {
                 "type": "number",
                 "description": "The height of the vertical curve of the beam."
+            },
+            "beamShape": {
+                "type": "string",
+                "description": "Whether the beam is straight or curved. arcAngle/verticalCurveHeight only have an effect for the matching curved shape.",
+                "enum": ["Straight", "HorizontallyCurved", "VerticallyCurved"]
+            },
+            "isSlanted": {
+                "type": "boolean",
+                "description": "Whether the beam is slanted. slantAngle only has an effect when this is true."
+            },
+            "isFlipped": {
+                "type": "boolean",
+                "description": "Whether the beam is mirrored. Applies to profiled beams only."
+            },
+            "profileAngle": {
+                "type": "number",
+                "description": "Profile rotation angle around the beam's center line, in radians."
+            },
+            "anchorPoint": {
+                "type": "string",
+                "description": "The anchor point of the beam's reference line, on a 3x3 grid.",
+                "enum": ["TopLeft", "TopCenter", "TopRight", "MiddleLeft", "Center", "MiddleRight", "BottomLeft", "BottomCenter", "BottomRight"]
+            },
+            "holes": {
+                "type": "array",
+                "description": "The holes placed on the beam.",
+                "items": {
+                    "type": "object",
+                    "properties": {
+                        "holeId": {
+                            "type": "integer",
+                            "description": "Identifier of the hole, unique within the beam."
+                        },
+                        "type": {
+                            "type": "string",
+                            "enum": ["Rectangular", "Circular"]
+                        },
+                        "showContour": {
+                            "type": "boolean",
+                            "description": "Whether the hole's contour is shown in 2D."
+                        },
+                        "centerX": {
+                            "type": "number",
+                            "description": "X location of the hole's center relative to the beam's beginning coordinate."
+                        },
+                        "centerZ": {
+                            "type": "number",
+                            "description": "Z location of the hole's center relative to the top of the beam."
+                        },
+                        "width": {
+                            "type": "number"
+                        },
+                        "height": {
+                            "type": "number",
+                            "description": "Only effective for the Rectangular type."
+                        }
+                    },
+                    "additionalProperties": false,
+                    "required": ["holeId", "type", "showContour", "centerX", "centerZ", "width", "height"]
+                }
+            },
+            "cutFillPen": {
+                "$ref": "#/OverriddenPen"
+            },
+            "cutFillBackgroundPen": {
+                "$ref": "#/OverriddenPen"
+            },
+            "coverFill": {
+                "$ref": "#/CoverFill"
             }
         },
         "additionalProperties": false,
@@ -2876,7 +3181,16 @@
             "offset",
             "slantAngle",
             "arcAngle",
-            "verticalCurveHeight"
+            "verticalCurveHeight",
+            "beamShape",
+            "isSlanted",
+            "isFlipped",
+            "profileAngle",
+            "cutFillPen",
+            "cutFillBackgroundPen",
+            "coverFill",
+            "anchorPoint",
+            "holes"
         ]
     },
     "SlabDetails": {
@@ -2926,6 +3240,32 @@
             },
             "compositeId": {
                 "$ref": "#/AttributeId"
+            },
+            "referencePlaneLocation": {
+                "type": "string",
+                "description": "Location of the reference plane. For a basic (homogeneous) slab only Top or Bottom are valid.",
+                "enum": ["Top", "CoreTop", "CoreBottom", "Bottom"]
+            },
+            "topMaterial": {
+                "$ref": "#/OverriddenMaterial",
+                "description": "Top material attribute override."
+            },
+            "sideMaterial": {
+                "$ref": "#/OverriddenMaterial",
+                "description": "Side material attribute override."
+            },
+            "bottomMaterial": {
+                "$ref": "#/OverriddenMaterial",
+                "description": "Bottom material attribute override."
+            },
+            "cutFillPen": {
+                "$ref": "#/OverriddenPen"
+            },
+            "cutFillBackgroundPen": {
+                "$ref": "#/OverriddenPen"
+            },
+            "floorFill": {
+                "$ref": "#/FloorFill"
             }
         },
         "additionalProperties": false,
@@ -2935,7 +3275,14 @@
             "offsetFromTop",
             "zCoordinate",
             "polygonOutline",
-            "holes"
+            "holes",
+            "referencePlaneLocation",
+            "topMaterial",
+            "sideMaterial",
+            "bottomMaterial",
+            "cutFillPen",
+            "cutFillBackgroundPen",
+            "floorFill"
         ]
     },
     "ColumnDetails": {
@@ -2954,6 +3301,46 @@
             "bottomOffset": {
                 "type": "number",
                 "description": "base level of the column relative to the floor level"
+            },
+            "axisRotationAngle": {
+                "type": "number",
+                "description": "The angle of rotation around the axis of the column, in radians."
+            },
+            "isSlanted": {
+                "type": "boolean",
+                "description": "Whether the column is slanted. slantAngle/slantDirectionAngle only have an effect when this is true."
+            },
+            "slantAngle": {
+                "type": "number",
+                "description": "Slant angle, in radians."
+            },
+            "slantDirectionAngle": {
+                "type": "number",
+                "description": "The rotation angle of the slanted column on the horizontal plane, in radians."
+            },
+            "isFlipped": {
+                "type": "boolean"
+            },
+            "wrapping": {
+                "type": "boolean",
+                "description": "Whether the wall wraps around the column."
+            },
+            "topOffset": {
+                "type": "number",
+                "description": "The offset from the top floor if the column is top-linked."
+            },
+            "relativeTopStory": {
+                "type": "number",
+                "description": "The top-linked story, relative to the home story. 0 means not top-linked."
+            },
+            "cutFillPen": {
+                "$ref": "#/OverriddenPen"
+            },
+            "cutFillBackgroundPen": {
+                "$ref": "#/OverriddenPen"
+            },
+            "coverFill": {
+                "$ref": "#/CoverFill"
             }
         },
         "additionalProperties": false,
@@ -2961,7 +3348,18 @@
             "origin",
             "zCoordinate",
             "height",
-            "bottomOffset"
+            "bottomOffset",
+            "axisRotationAngle",
+            "isSlanted",
+            "slantAngle",
+            "slantDirectionAngle",
+            "isFlipped",
+            "wrapping",
+            "coverFill",
+            "cutFillPen",
+            "cutFillBackgroundPen",
+            "topOffset",
+            "relativeTopStory"
         ]
     },
     "DetailWorksheetDetails": {
@@ -3129,6 +3527,140 @@
                 "items": {
                     "$ref": "#/PolyArc"
                 }
+            },
+            "zCoordinate": {
+                "type": "number"
+            }
+        },
+        "additionalProperties": false,
+        "required": [
+            "coordinates",
+            "zCoordinate"
+        ]
+    },
+    "LineDetails": {
+        "type": "object",
+        "properties": {
+            "begCoordinate": {
+                "$ref": "#/Coordinate2D"
+            },
+            "endCoordinate": {
+                "$ref": "#/Coordinate2D"
+            },
+            "zCoordinate": {
+                "type": "number"
+            }
+        },
+        "additionalProperties": false,
+        "required": [
+            "begCoordinate",
+            "endCoordinate",
+            "zCoordinate"
+        ]
+    },
+    "ArcDetails": {
+        "type": "object",
+        "description": "Geometry of an Arc or Circle element. begAngle/endAngle are only present for Arc (a Circle spans the full 0-2*PI range implicitly).",
+        "properties": {
+            "origin": {
+                "$ref": "#/Coordinate2D"
+            },
+            "radius": {
+                "type": "number"
+            },
+            "angle": {
+                "type": "number",
+                "description": "0.0, or the angle of the 'a' axis in radians."
+            },
+            "ratio": {
+                "type": "number",
+                "description": "1.0, or 'a/b' of the ellipse."
+            },
+            "begAngle": {
+                "type": "number",
+                "description": "Beginning angle of the arc in radians. Only present for Arc, not Circle."
+            },
+            "endAngle": {
+                "type": "number",
+                "description": "End angle of the arc in radians. Only present for Arc, not Circle."
+            },
+            "reflected": {
+                "type": "boolean"
+            },
+            "zCoordinate": {
+                "type": "number"
+            }
+        },
+        "additionalProperties": false,
+        "required": [
+            "origin",
+            "radius",
+            "angle",
+            "ratio",
+            "reflected",
+            "zCoordinate"
+        ]
+    },
+    "HotspotDetails": {
+        "type": "object",
+        "properties": {
+            "position": {
+                "$ref": "#/Coordinate2D"
+            },
+            "height": {
+                "type": "number",
+                "description": "Z coordinate of the hotspot (can come from a GDL script)."
+            }
+        },
+        "additionalProperties": false,
+        "required": [
+            "position",
+            "height"
+        ]
+    },
+    "SplineDetails": {
+        "type": "object",
+        "description": "Geometry of a Spline element. Read-only: Archicad's own API does not support modifying Spline geometry via ACAPI_Element_Change.",
+        "properties": {
+            "coordinates": {
+                "type": "array",
+                "items": {
+                    "$ref": "#/Coordinate2D"
+                }
+            },
+            "closed": {
+                "type": "boolean",
+                "description": "Is this a closed curve?"
+            },
+            "zCoordinate": {
+                "type": "number"
+            }
+        },
+        "additionalProperties": false,
+        "required": [
+            "coordinates",
+            "closed",
+            "zCoordinate"
+        ]
+    },
+    "HatchDetails": {
+        "type": "object",
+        "properties": {
+            "coordinates": {
+                "type": "array",
+                "items": {
+                    "$ref": "#/Coordinate2D"
+                }
+            },
+            "arcs": {
+                "type": "array",
+                "description": "The arcs of the hatch outline.",
+                "items": {
+                    "$ref": "#/PolyArc"
+                }
+            },
+            "holes": {
+                "$ref": "#/Holes2D"
             },
             "zCoordinate": {
                 "type": "number"
@@ -3535,6 +4067,36 @@
                     "$ref": "#/Coordinate2D"
                 },
                 "minItems": 3
+            },
+            "nameType": {
+                "type": "string",
+                "enum": ["ViewOrSourceFileName", "ViewIdAndName", "CustomName"],
+                "description": "How the drawing's title name is assembled (Identification tabpage of the Drawing Settings dialog)."
+            },
+            "customName": {
+                "type": "string",
+                "description": "The drawing's custom title name. Present only when nameType is CustomName."
+            },
+            "numberingType": {
+                "type": "string",
+                "enum": ["ByLayout", "ByViewId", "CustomNumber"],
+                "description": "How the drawing's title ID is assigned (Identification tabpage of the Drawing Settings dialog)."
+            },
+            "customNumber": {
+                "type": "string",
+                "description": "The drawing's custom title ID. Present only when numberingType is CustomNumber."
+            },
+            "isInNumbering": {
+                "type": "boolean",
+                "description": "Whether the drawing is included in the automatic drawing numbering sequence."
+            },
+            "titleLibraryPartIndex": {
+                "type": "number",
+                "description": "Library part index of the drawing title (API_DrawingTitle::libInd). A negative/invalid index means no title object is instantiated; setting it to a valid index (e.g. copied from another drawing) makes Archicad create the title's own placed element."
+            },
+            "titleElementId": {
+                "$ref": "#/ElementId",
+                "description": "Id of the drawing title, itself a placed GDL object element (font/pen/size aside, its own settings are reachable like any other element, e.g. with GetGDLParametersOfElements/SetGDLParametersOfElements). Absent if the drawing has no title object."
             }
         },
         "additionalProperties": false,
@@ -3545,7 +4107,11 @@
             "drawingScale",
             "modelOffset",
             "isCutWithFrame",
-            "bounds"
+            "bounds",
+            "nameType",
+            "numberingType",
+            "isInNumbering",
+            "titleLibraryPartIndex"
         ]
     },
     "LabelDetails": {
@@ -3611,6 +4177,21 @@
             },
             {
                 "$ref": "#/PolylineDetails"
+            },
+            {
+                "$ref": "#/LineDetails"
+            },
+            {
+                "$ref": "#/ArcDetails"
+            },
+            {
+                "$ref": "#/HotspotDetails"
+            },
+            {
+                "$ref": "#/SplineDetails"
+            },
+            {
+                "$ref": "#/HatchDetails"
             },
             {
                 "$ref": "#/ZoneDetails"
@@ -4105,6 +4686,108 @@
         "additionalProperties": false,
         "required": []
     },
+    "LineSettings": {
+        "type": "object",
+        "description": "Settings for modifying a Line.",
+        "properties": {
+            "begCoordinate": {
+                "$ref": "#/Coordinate2D"
+            },
+            "endCoordinate": {
+                "$ref": "#/Coordinate2D"
+            }
+        },
+        "additionalProperties": false,
+        "required": []
+    },
+    "ArcSettings": {
+        "type": "object",
+        "description": "Settings for modifying an Arc or Circle. begAngle/endAngle are only applied to Arc, ignored for Circle.",
+        "properties": {
+            "origin": {
+                "$ref": "#/Coordinate2D"
+            },
+            "radius": {
+                "type": "number"
+            },
+            "angle": {
+                "type": "number"
+            },
+            "ratio": {
+                "type": "number"
+            },
+            "begAngle": {
+                "type": "number"
+            },
+            "endAngle": {
+                "type": "number"
+            },
+            "reflected": {
+                "type": "boolean"
+            }
+        },
+        "additionalProperties": false,
+        "required": []
+    },
+    "HotspotSettings": {
+        "type": "object",
+        "description": "Settings for modifying a Hotspot.",
+        "properties": {
+            "position": {
+                "$ref": "#/Coordinate2D"
+            },
+            "height": {
+                "type": "number"
+            }
+        },
+        "additionalProperties": false,
+        "required": []
+    },
+    "PolylineSettings": {
+        "type": "object",
+        "description": "Settings for modifying a Polyline. Setting coordinates replaces the entire polygon (single contour, no holes) and may change the number of vertices.",
+        "properties": {
+            "coordinates": {
+                "type": "array",
+                "items": {
+                    "$ref": "#/Coordinate2D"
+                },
+                "minItems": 2
+            },
+            "arcs": {
+                "type": "array",
+                "items": {
+                    "$ref": "#/PolyArc"
+                }
+            }
+        },
+        "additionalProperties": false,
+        "required": []
+    },
+    "HatchSettings": {
+        "type": "object",
+        "description": "Settings for modifying a Hatch. Setting coordinates replaces the entire polygon (outline plus optional holes) and may change the number of vertices.",
+        "properties": {
+            "coordinates": {
+                "type": "array",
+                "items": {
+                    "$ref": "#/Coordinate2D"
+                },
+                "minItems": 3
+            },
+            "arcs": {
+                "type": "array",
+                "items": {
+                    "$ref": "#/PolyArc"
+                }
+            },
+            "holes": {
+                "$ref": "#/Holes2D"
+            }
+        },
+        "additionalProperties": false,
+        "required": []
+    },
     "DrawingSettings": {
         "description": "Modifiable settings for a Drawing element placed on a layout.",
         "type": "object",
@@ -4116,6 +4799,32 @@
                     "$ref": "#/2DCoordinate"
                 },
                 "minItems": 3
+            },
+            "nameType": {
+                "type": "string",
+                "enum": ["ViewOrSourceFileName", "ViewIdAndName", "CustomName"],
+                "description": "How the drawing's title name is assembled (Identification tabpage of the Drawing Settings dialog)."
+            },
+            "customName": {
+                "type": "string",
+                "description": "The drawing's custom title name. Only used when nameType is CustomName."
+            },
+            "numberingType": {
+                "type": "string",
+                "enum": ["ByLayout", "ByViewId", "CustomNumber"],
+                "description": "How the drawing's title ID is assigned (Identification tabpage of the Drawing Settings dialog)."
+            },
+            "customNumber": {
+                "type": "string",
+                "description": "The drawing's custom title ID. Only used when numberingType is CustomNumber."
+            },
+            "isInNumbering": {
+                "type": "boolean",
+                "description": "Whether the drawing is included in the automatic drawing numbering sequence."
+            },
+            "titleLibraryPartIndex": {
+                "type": "number",
+                "description": "Library part index of the drawing title (API_DrawingTitle::libInd). A negative/invalid index means no title object is instantiated; setting it to a valid index (e.g. copied from another drawing) makes Archicad create the title's own placed element."
             }
         },
         "additionalProperties": false
@@ -4129,6 +4838,21 @@
             },
             {
                 "$ref": "#/ZoneSettings"
+            },
+            {
+                "$ref": "#/LineSettings"
+            },
+            {
+                "$ref": "#/ArcSettings"
+            },
+            {
+                "$ref": "#/HotspotSettings"
+            },
+            {
+                "$ref": "#/PolylineSettings"
+            },
+            {
+                "$ref": "#/HatchSettings"
             },
             {
                 "$ref": "#/DrawingSettings"

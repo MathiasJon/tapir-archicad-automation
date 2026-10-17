@@ -2756,8 +2756,92 @@ Response:
                 },
                 "height": 3,
                 "bottomOffset": 0,
-                "offset": 0
-            }
+                "offset": 0,
+                "flipped": true,
+                "begThickness": 0.3,
+                "endThickness": 0.3,
+                "compositeId": {
+                    "guid": "<GUID>"
+                },
+                "referenceLineLocation": "CoreOutside",
+                "slantAlpha": 1.570796327,
+                "slantBeta": 1.570796327,
+                "topOffset": 0,
+                "relativeTopStory": 0,
+                "zoneRel": "Boundary",
+                "visibility": {
+                    "showOnHome": false,
+                    "showAllAbove": false,
+                    "showAllBelow": false,
+                    "showRelAbove": 0,
+                    "showRelBelow": 0
+                },
+                "referenceMaterial": {
+                    "overridden": false
+                },
+                "oppositeMaterial": {
+                    "overridden": false
+                },
+                "sideMaterial": {
+                    "overridden": false
+                },
+                "cutFillPen": {
+                    "overridden": false
+                },
+                "cutFillBackgroundPen": {
+                    "overridden": false
+                }
+            },
+            "floorPlanPolygons": [
+                {
+                    "coordinates": [
+                        {
+                            "x": 0,
+                            "y": -0.05
+                        },
+                        {
+                            "x": 1.234,
+                            "y": -0.05
+                        },
+                        {
+                            "x": 1.234,
+                            "y": 0
+                        },
+                        {
+                            "x": 0,
+                            "y": 0
+                        },
+                        {
+                            "x": 0,
+                            "y": -0.05
+                        }
+                    ]
+                },
+                {
+                    "coordinates": [
+                        {
+                            "x": 0,
+                            "y": 0
+                        },
+                        {
+                            "x": 1.234,
+                            "y": 0
+                        },
+                        {
+                            "x": 1.234,
+                            "y": 0.25
+                        },
+                        {
+                            "x": 0,
+                            "y": 0.25
+                        },
+                        {
+                            "x": 0,
+                            "y": 0
+                        }
+                    ]
+                }
+            ]
         },
         {
             "type": "Wall",
@@ -2767,8 +2851,6 @@ Response:
             "id": "SW - 001",
             "details": {
                 "geometryType": "Trapezoid",
-                "begThickness": 0.2,
-                "endThickness": 0.25,
                 "structureType": "Basic",
                 "zCoordinate": 3.2,
                 "begCoordinate": {
@@ -2781,8 +2863,68 @@ Response:
                 },
                 "height": 2.8,
                 "bottomOffset": 0.2,
-                "offset": 0
-            }
+                "offset": 0,
+                "flipped": true,
+                "begThickness": 0.2,
+                "endThickness": 0.25,
+                "buildingMaterialId": {
+                    "guid": "<GUID>"
+                },
+                "referenceLineLocation": "Outside",
+                "slantAlpha": 1.570796327,
+                "slantBeta": 1.570796327,
+                "topOffset": 0,
+                "relativeTopStory": 0,
+                "zoneRel": "Boundary",
+                "visibility": {
+                    "showOnHome": false,
+                    "showAllAbove": false,
+                    "showAllBelow": false,
+                    "showRelAbove": 0,
+                    "showRelBelow": 0
+                },
+                "referenceMaterial": {
+                    "overridden": false
+                },
+                "oppositeMaterial": {
+                    "overridden": false
+                },
+                "sideMaterial": {
+                    "overridden": false
+                },
+                "cutFillPen": {
+                    "overridden": false
+                },
+                "cutFillBackgroundPen": {
+                    "overridden": false
+                }
+            },
+            "floorPlanPolygons": [
+                {
+                    "coordinates": [
+                        {
+                            "x": 0,
+                            "y": 0.4
+                        },
+                        {
+                            "x": 1.234,
+                            "y": 0.4
+                        },
+                        {
+                            "x": 1.234,
+                            "y": 0.65
+                        },
+                        {
+                            "x": 0,
+                            "y": 0.6
+                        },
+                        {
+                            "x": 0,
+                            "y": 0.4
+                        }
+                    ]
+                }
+            ]
         },
         {
             "type": "Wall",
@@ -2826,8 +2968,68 @@ Response:
                 },
                 "height": 2.5,
                 "bottomOffset": 0,
-                "offset": 0
-            }
+                "offset": 0,
+                "flipped": true,
+                "begThickness": 0,
+                "endThickness": 0,
+                "buildingMaterialId": {
+                    "guid": "<GUID>"
+                },
+                "referenceLineLocation": "Outside",
+                "slantAlpha": 1.570796327,
+                "slantBeta": 1.570796327,
+                "topOffset": 0,
+                "relativeTopStory": 0,
+                "zoneRel": "Boundary",
+                "visibility": {
+                    "showOnHome": false,
+                    "showAllAbove": false,
+                    "showAllBelow": false,
+                    "showRelAbove": 0,
+                    "showRelBelow": 0
+                },
+                "referenceMaterial": {
+                    "overridden": false
+                },
+                "oppositeMaterial": {
+                    "overridden": false
+                },
+                "sideMaterial": {
+                    "overridden": false
+                },
+                "cutFillPen": {
+                    "overridden": false
+                },
+                "cutFillBackgroundPen": {
+                    "overridden": false
+                }
+            },
+            "floorPlanPolygons": [
+                {
+                    "coordinates": [
+                        {
+                            "x": 1.35,
+                            "y": 0.4
+                        },
+                        {
+                            "x": 2.584,
+                            "y": 0.4
+                        },
+                        {
+                            "x": 2.584,
+                            "y": 0.65
+                        },
+                        {
+                            "x": 1.35,
+                            "y": 0.6
+                        },
+                        {
+                            "x": 1.35,
+                            "y": 0.4
+                        }
+                    ]
+                }
+            ]
         },
         {
             "type": "Wall",
@@ -2871,8 +3073,68 @@ Response:
                 },
                 "height": 3,
                 "bottomOffset": 0,
-                "offset": 0
-            }
+                "offset": 0,
+                "flipped": false,
+                "begThickness": 0,
+                "endThickness": 0,
+                "buildingMaterialId": {
+                    "guid": "<GUID>"
+                },
+                "referenceLineLocation": "Outside",
+                "slantAlpha": 1.570796327,
+                "slantBeta": 1.570796327,
+                "topOffset": 0,
+                "relativeTopStory": 1,
+                "zoneRel": "Boundary",
+                "visibility": {
+                    "showOnHome": false,
+                    "showAllAbove": false,
+                    "showAllBelow": false,
+                    "showRelAbove": 0,
+                    "showRelBelow": 0
+                },
+                "referenceMaterial": {
+                    "overridden": false
+                },
+                "oppositeMaterial": {
+                    "overridden": false
+                },
+                "sideMaterial": {
+                    "overridden": false
+                },
+                "cutFillPen": {
+                    "overridden": false
+                },
+                "cutFillBackgroundPen": {
+                    "overridden": false
+                }
+            },
+            "floorPlanPolygons": [
+                {
+                    "coordinates": [
+                        {
+                            "x": 4.328634698,
+                            "y": 1.273521209
+                        },
+                        {
+                            "x": 5.212474801,
+                            "y": 1.273521209
+                        },
+                        {
+                            "x": 4.625787836,
+                            "y": 2.622139298
+                        },
+                        {
+                            "x": 4.084816738,
+                            "y": 2.622139298
+                        },
+                        {
+                            "x": 4.328634698,
+                            "y": 1.273521209
+                        }
+                    ]
+                }
+            ]
         },
         {
             "type": "Wall",
@@ -2895,8 +3157,108 @@ Response:
                 },
                 "height": 3,
                 "bottomOffset": 0,
-                "offset": 0
-            }
+                "offset": 0,
+                "flipped": true,
+                "begThickness": 0.3,
+                "endThickness": 0.3,
+                "buildingMaterialId": {
+                    "guid": "<GUID>"
+                },
+                "referenceLineLocation": "Outside",
+                "slantAlpha": 1.570796327,
+                "slantBeta": 1.570796327,
+                "topOffset": 0,
+                "relativeTopStory": 1,
+                "zoneRel": "Boundary",
+                "visibility": {
+                    "showOnHome": false,
+                    "showAllAbove": false,
+                    "showAllBelow": false,
+                    "showRelAbove": 0,
+                    "showRelBelow": 0
+                },
+                "referenceMaterial": {
+                    "overridden": false
+                },
+                "oppositeMaterial": {
+                    "overridden": false
+                },
+                "sideMaterial": {
+                    "overridden": false
+                },
+                "cutFillPen": {
+                    "overridden": false
+                },
+                "cutFillBackgroundPen": {
+                    "overridden": false
+                }
+            },
+            "floorPlanPolygons": [
+                {
+                    "coordinates": [
+                        {
+                            "x": 5.863901967,
+                            "y": 0.572771563
+                        },
+                        {
+                            "x": 5.863901967,
+                            "y": 0.272771563
+                        },
+                        {
+                            "x": 6.163901967,
+                            "y": 0.572771563
+                        },
+                        {
+                            "x": 5.863901967,
+                            "y": 0.572771563
+                        }
+                    ]
+                },
+                {
+                    "coordinates": [
+                        {
+                            "x": 6.163901967,
+                            "y": 0.572771563
+                        },
+                        {
+                            "x": 5.863901967,
+                            "y": 0.272771563
+                        },
+                        {
+                            "x": 6.163901967,
+                            "y": 0.272771563
+                        },
+                        {
+                            "x": 6.163901967,
+                            "y": 0.572771563
+                        }
+                    ]
+                },
+                {
+                    "coordinates": [
+                        {
+                            "x": 6.163901967,
+                            "y": 0.572771568
+                        },
+                        {
+                            "x": 6.163901967,
+                            "y": 0.272771563
+                        },
+                        {
+                            "x": 7.27215771,
+                            "y": 0.272771563
+                        },
+                        {
+                            "x": 7.134422343,
+                            "y": 0.572771568
+                        },
+                        {
+                            "x": 6.163901967,
+                            "y": 0.572771568
+                        }
+                    ]
+                }
+            ]
         },
         {
             "type": "Wall",
@@ -2919,8 +3281,68 @@ Response:
                 },
                 "height": 3,
                 "bottomOffset": 0,
-                "offset": 0
-            }
+                "offset": 0,
+                "flipped": true,
+                "begThickness": 0.3,
+                "endThickness": 0.3,
+                "buildingMaterialId": {
+                    "guid": "<GUID>"
+                },
+                "referenceLineLocation": "Outside",
+                "slantAlpha": 1.570796327,
+                "slantBeta": 1.570796327,
+                "topOffset": 0,
+                "relativeTopStory": 1,
+                "zoneRel": "Boundary",
+                "visibility": {
+                    "showOnHome": false,
+                    "showAllAbove": false,
+                    "showAllBelow": false,
+                    "showRelAbove": 0,
+                    "showRelBelow": 0
+                },
+                "referenceMaterial": {
+                    "overridden": false
+                },
+                "oppositeMaterial": {
+                    "overridden": false
+                },
+                "sideMaterial": {
+                    "overridden": false
+                },
+                "cutFillPen": {
+                    "overridden": false
+                },
+                "cutFillBackgroundPen": {
+                    "overridden": false
+                }
+            },
+            "floorPlanPolygons": [
+                {
+                    "coordinates": [
+                        {
+                            "x": 7.27215771,
+                            "y": 0.272771563
+                        },
+                        {
+                            "x": 7.27215771,
+                            "y": 1.681027306
+                        },
+                        {
+                            "x": 7.134422344,
+                            "y": 1.381027306
+                        },
+                        {
+                            "x": 7.134422344,
+                            "y": 0.572771563
+                        },
+                        {
+                            "x": 7.27215771,
+                            "y": 0.272771563
+                        }
+                    ]
+                }
+            ]
         },
         {
             "type": "Wall",
@@ -2943,8 +3365,88 @@ Response:
                 },
                 "height": 3,
                 "bottomOffset": 0,
-                "offset": 0
-            }
+                "offset": 0,
+                "flipped": true,
+                "begThickness": 0.3,
+                "endThickness": 0.3,
+                "buildingMaterialId": {
+                    "guid": "<GUID>"
+                },
+                "referenceLineLocation": "Outside",
+                "slantAlpha": 1.570796327,
+                "slantBeta": 1.570796327,
+                "topOffset": 0,
+                "relativeTopStory": 1,
+                "zoneRel": "Boundary",
+                "visibility": {
+                    "showOnHome": false,
+                    "showAllAbove": false,
+                    "showAllBelow": false,
+                    "showRelAbove": 0,
+                    "showRelBelow": 0
+                },
+                "referenceMaterial": {
+                    "overridden": false
+                },
+                "oppositeMaterial": {
+                    "overridden": false
+                },
+                "sideMaterial": {
+                    "overridden": false
+                },
+                "cutFillPen": {
+                    "overridden": false
+                },
+                "cutFillBackgroundPen": {
+                    "overridden": false
+                }
+            },
+            "floorPlanPolygons": [
+                {
+                    "coordinates": [
+                        {
+                            "x": 6.163901967,
+                            "y": 1.381027306
+                        },
+                        {
+                            "x": 5.863901967,
+                            "y": 1.681027306
+                        },
+                        {
+                            "x": 5.863901967,
+                            "y": 1.381027306
+                        },
+                        {
+                            "x": 6.163901967,
+                            "y": 1.381027306
+                        }
+                    ]
+                },
+                {
+                    "coordinates": [
+                        {
+                            "x": 5.863901967,
+                            "y": 1.6810273
+                        },
+                        {
+                            "x": 6.16390196,
+                            "y": 1.381027306
+                        },
+                        {
+                            "x": 7.134422337,
+                            "y": 1.381027306
+                        },
+                        {
+                            "x": 7.27215771,
+                            "y": 1.6810273
+                        },
+                        {
+                            "x": 5.863901967,
+                            "y": 1.6810273
+                        }
+                    ]
+                }
+            ]
         },
         {
             "type": "Wall",
@@ -2967,8 +3469,68 @@ Response:
                 },
                 "height": 3,
                 "bottomOffset": 0,
-                "offset": 0
-            }
+                "offset": 0,
+                "flipped": true,
+                "begThickness": 0.3,
+                "endThickness": 0.3,
+                "buildingMaterialId": {
+                    "guid": "<GUID>"
+                },
+                "referenceLineLocation": "Outside",
+                "slantAlpha": 1.570796327,
+                "slantBeta": 1.570796327,
+                "topOffset": 0,
+                "relativeTopStory": 1,
+                "zoneRel": "Boundary",
+                "visibility": {
+                    "showOnHome": false,
+                    "showAllAbove": false,
+                    "showAllBelow": false,
+                    "showRelAbove": 0,
+                    "showRelBelow": 0
+                },
+                "referenceMaterial": {
+                    "overridden": false
+                },
+                "oppositeMaterial": {
+                    "overridden": false
+                },
+                "sideMaterial": {
+                    "overridden": false
+                },
+                "cutFillPen": {
+                    "overridden": false
+                },
+                "cutFillBackgroundPen": {
+                    "overridden": false
+                }
+            },
+            "floorPlanPolygons": [
+                {
+                    "coordinates": [
+                        {
+                            "x": 6.163901967,
+                            "y": 0.572771563
+                        },
+                        {
+                            "x": 6.163901967,
+                            "y": 1.381027306
+                        },
+                        {
+                            "x": 5.863901967,
+                            "y": 1.381027306
+                        },
+                        {
+                            "x": 5.863901967,
+                            "y": 0.572771563
+                        },
+                        {
+                            "x": 6.163901967,
+                            "y": 0.572771563
+                        }
+                    ]
+                }
+            ]
         },
         {
             "type": "Column",
@@ -2983,8 +3545,73 @@ Response:
                 },
                 "zCoordinate": 0.3,
                 "height": 2.5,
-                "bottomOffset": 0.3
-            }
+                "bottomOffset": 0.3,
+                "axisRotationAngle": 0,
+                "isSlanted": false,
+                "slantAngle": 1.570796327,
+                "slantDirectionAngle": 0,
+                "isFlipped": false,
+                "wrapping": false,
+                "topOffset": -0.2,
+                "relativeTopStory": 0,
+                "cutFillPen": {
+                    "overridden": false
+                },
+                "cutFillBackgroundPen": {
+                    "overridden": false
+                },
+                "coverFill": {
+                    "use": true,
+                    "useFromSurface": false,
+                    "orientationComesFrom3D": false,
+                    "fillId": {
+                        "guid": "<GUID>"
+                    },
+                    "foregroundPen": 88,
+                    "backgroundPen": -1,
+                    "transformationType": "Global",
+                    "transformation": {
+                        "origin": {
+                            "x": 0,
+                            "y": 0
+                        },
+                        "xAxis": {
+                            "x": 1,
+                            "y": 0
+                        },
+                        "yAxis": {
+                            "x": 0,
+                            "y": 1
+                        }
+                    }
+                }
+            },
+            "floorPlanPolygons": [
+                {
+                    "coordinates": [
+                        {
+                            "x": 0.15,
+                            "y": 0.85
+                        },
+                        {
+                            "x": 0.15,
+                            "y": 1.15
+                        },
+                        {
+                            "x": -0.15,
+                            "y": 1.15
+                        },
+                        {
+                            "x": -0.15,
+                            "y": 0.85
+                        },
+                        {
+                            "x": 0.15,
+                            "y": 0.85
+                        }
+                    ]
+                }
+            ]
         },
         {
             "type": "Column",
@@ -2999,7 +3626,46 @@ Response:
                 },
                 "zCoordinate": 0,
                 "height": 2.8,
-                "bottomOffset": 0
+                "bottomOffset": 0,
+                "axisRotationAngle": 0,
+                "isSlanted": false,
+                "slantAngle": 1.570796327,
+                "slantDirectionAngle": 0,
+                "isFlipped": false,
+                "wrapping": false,
+                "topOffset": -0.2,
+                "relativeTopStory": 0,
+                "cutFillPen": {
+                    "overridden": false
+                },
+                "cutFillBackgroundPen": {
+                    "overridden": false
+                },
+                "coverFill": {
+                    "use": true,
+                    "useFromSurface": false,
+                    "orientationComesFrom3D": false,
+                    "fillId": {
+                        "guid": "<GUID>"
+                    },
+                    "foregroundPen": 88,
+                    "backgroundPen": -1,
+                    "transformationType": "Global",
+                    "transformation": {
+                        "origin": {
+                            "x": 0,
+                            "y": 0
+                        },
+                        "xAxis": {
+                            "x": 1,
+                            "y": 0
+                        },
+                        "yAxis": {
+                            "x": 0,
+                            "y": 1
+                        }
+                    }
+                }
             }
         },
         {
@@ -3022,7 +3688,44 @@ Response:
                 "offset": 0,
                 "slantAngle": 0,
                 "arcAngle": 0,
-                "verticalCurveHeight": 0
+                "verticalCurveHeight": 0,
+                "beamShape": "Straight",
+                "isSlanted": false,
+                "isFlipped": false,
+                "profileAngle": 0,
+                "anchorPoint": "TopCenter",
+                "cutFillPen": {
+                    "overridden": false
+                },
+                "cutFillBackgroundPen": {
+                    "overridden": false
+                },
+                "coverFill": {
+                    "use": true,
+                    "useFromSurface": false,
+                    "orientationComesFrom3D": false,
+                    "fillId": {
+                        "guid": "<GUID>"
+                    },
+                    "foregroundPen": 90,
+                    "backgroundPen": -1,
+                    "transformationType": "Global",
+                    "transformation": {
+                        "origin": {
+                            "x": 0,
+                            "y": 0
+                        },
+                        "xAxis": {
+                            "x": 1,
+                            "y": 0
+                        },
+                        "yAxis": {
+                            "x": 0,
+                            "y": 1
+                        }
+                    }
+                },
+                "holes": []
             }
         },
         {
@@ -3045,7 +3748,44 @@ Response:
                 "offset": 0,
                 "slantAngle": 0,
                 "arcAngle": 0,
-                "verticalCurveHeight": 0
+                "verticalCurveHeight": 0,
+                "beamShape": "Straight",
+                "isSlanted": false,
+                "isFlipped": false,
+                "profileAngle": 0,
+                "anchorPoint": "TopCenter",
+                "cutFillPen": {
+                    "overridden": false
+                },
+                "cutFillBackgroundPen": {
+                    "overridden": false
+                },
+                "coverFill": {
+                    "use": true,
+                    "useFromSurface": false,
+                    "orientationComesFrom3D": false,
+                    "fillId": {
+                        "guid": "<GUID>"
+                    },
+                    "foregroundPen": 90,
+                    "backgroundPen": -1,
+                    "transformationType": "Global",
+                    "transformation": {
+                        "origin": {
+                            "x": 0,
+                            "y": 0
+                        },
+                        "xAxis": {
+                            "x": 1,
+                            "y": 0
+                        },
+                        "yAxis": {
+                            "x": 0,
+                            "y": 1
+                        }
+                    }
+                },
+                "holes": []
             }
         },
         {
@@ -7800,6 +8540,46 @@ Response:
                 "level": 0,
                 "offsetFromTop": 0.1,
                 "zCoordinate": 0,
+                "referencePlaneLocation": "CoreTop",
+                "compositeId": {
+                    "guid": "<GUID>"
+                },
+                "topMaterial": {
+                    "overridden": false
+                },
+                "sideMaterial": {
+                    "overridden": false
+                },
+                "bottomMaterial": {
+                    "overridden": false
+                },
+                "cutFillPen": {
+                    "overridden": false
+                },
+                "cutFillBackgroundPen": {
+                    "overridden": false
+                },
+                "floorFill": {
+                    "use": false,
+                    "foregroundPen": 89,
+                    "backgroundPen": -1,
+                    "fillId": {
+                        "guid": "<GUID>"
+                    },
+                    "use3DHatching": false,
+                    "orientation": {
+                        "type": "Global",
+                        "origin": {
+                            "x": 0,
+                            "y": 0
+                        },
+                        "matrix00": 1,
+                        "matrix10": 0,
+                        "matrix01": 0,
+                        "matrix11": 1,
+                        "innerRadius": 0
+                    }
+                },
                 "polygonOutline": [
                     {
                         "x": 2.218574919,
@@ -7841,6 +8621,46 @@ Response:
                 "level": 0,
                 "offsetFromTop": 0.1,
                 "zCoordinate": 0,
+                "referencePlaneLocation": "CoreTop",
+                "compositeId": {
+                    "guid": "<GUID>"
+                },
+                "topMaterial": {
+                    "overridden": false
+                },
+                "sideMaterial": {
+                    "overridden": false
+                },
+                "bottomMaterial": {
+                    "overridden": false
+                },
+                "cutFillPen": {
+                    "overridden": false
+                },
+                "cutFillBackgroundPen": {
+                    "overridden": false
+                },
+                "floorFill": {
+                    "use": false,
+                    "foregroundPen": 89,
+                    "backgroundPen": -1,
+                    "fillId": {
+                        "guid": "<GUID>"
+                    },
+                    "use3DHatching": false,
+                    "orientation": {
+                        "type": "Global",
+                        "origin": {
+                            "x": 0,
+                            "y": 0
+                        },
+                        "matrix00": 1,
+                        "matrix10": 0,
+                        "matrix01": 0,
+                        "matrix11": 1,
+                        "innerRadius": 0
+                    }
+                },
                 "polygonOutline": [
                     {
                         "x": 4.054339493,
@@ -7921,6 +8741,11 @@ Response:
                 "level": -0.2,
                 "skirtType": "SolidBodyWithSkirt",
                 "skirtLevel": 1,
+                "ridges": "AllSharp",
+                "showLines": true,
+                "contourPen": 53,
+                "levelPen": 73,
+                "lineTypeIndex": 1,
                 "polygonCoordinates": [
                     {
                         "x": 7.60071433,
@@ -8226,7 +9051,20 @@ Response:
                 "ownerElementId": {
                     "guid": "<GUID>"
                 },
-                "ownerElementType": "Zone"
+                "ownerElementType": "Zone",
+                "begCoordinate": {
+                    "x": 6.014296819,
+                    "y": 2.421236571
+                },
+                "midCoordinate": {
+                    "x": 7.014296819,
+                    "y": 3.421236571
+                },
+                "endCoordinate": {
+                    "x": 8.014296819,
+                    "y": 3.421236571
+                },
+                "hasLeaderLine": true
             }
         },
         {
@@ -8248,7 +9086,20 @@ Response:
                 "ownerElementId": {
                     "guid": "<GUID>"
                 },
-                "ownerElementType": "Zone"
+                "ownerElementType": "Zone",
+                "begCoordinate": {
+                    "x": 6.589801649,
+                    "y": 0.890879072
+                },
+                "midCoordinate": {
+                    "x": 7.589801649,
+                    "y": 1.890879072
+                },
+                "endCoordinate": {
+                    "x": 8.589801649,
+                    "y": 1.890879072
+                },
+                "hasLeaderLine": true
             }
         },
         {
@@ -8448,8 +9299,195 @@ Response:
             "id": "CW-001",
             "details": {
                 "height": 3,
-                "angle": 90
-            }
+                "angle": 90,
+                "flipped": false
+            },
+            "floorPlanPolygons": [
+                {
+                    "coordinates": [
+                        {
+                            "x": 0.02,
+                            "y": 2.74
+                        },
+                        {
+                            "x": 0.89,
+                            "y": 2.74
+                        },
+                        {
+                            "x": 0.89,
+                            "y": 2.76
+                        },
+                        {
+                            "x": 0.02,
+                            "y": 2.76
+                        },
+                        {
+                            "x": 0.02,
+                            "y": 2.74
+                        }
+                    ]
+                },
+                {
+                    "coordinates": [
+                        {
+                            "x": 0.91,
+                            "y": 2.74
+                        },
+                        {
+                            "x": 1.18,
+                            "y": 2.74
+                        },
+                        {
+                            "x": 1.18,
+                            "y": 2.76
+                        },
+                        {
+                            "x": 0.91,
+                            "y": 2.76
+                        },
+                        {
+                            "x": 0.91,
+                            "y": 2.74
+                        }
+                    ]
+                },
+                {
+                    "coordinates": [
+                        {
+                            "x": 0.02,
+                            "y": 2.76
+                        },
+                        {
+                            "x": 0.05,
+                            "y": 2.76
+                        },
+                        {
+                            "x": 0.05,
+                            "y": 3
+                        },
+                        {
+                            "x": -0.05,
+                            "y": 3
+                        },
+                        {
+                            "x": -0.05,
+                            "y": 2.7
+                        },
+                        {
+                            "x": 0.05,
+                            "y": 2.7
+                        },
+                        {
+                            "x": 0.05,
+                            "y": 2.74
+                        },
+                        {
+                            "x": 0.02,
+                            "y": 2.74
+                        },
+                        {
+                            "x": 0.02,
+                            "y": 2.76
+                        }
+                    ]
+                },
+                {
+                    "coordinates": [
+                        {
+                            "x": 1.18,
+                            "y": 2.76
+                        },
+                        {
+                            "x": 1.18,
+                            "y": 2.74
+                        },
+                        {
+                            "x": 1.15,
+                            "y": 2.74
+                        },
+                        {
+                            "x": 1.15,
+                            "y": 2.7
+                        },
+                        {
+                            "x": 1.25,
+                            "y": 2.7
+                        },
+                        {
+                            "x": 1.25,
+                            "y": 3
+                        },
+                        {
+                            "x": 1.15,
+                            "y": 3
+                        },
+                        {
+                            "x": 1.15,
+                            "y": 2.76
+                        },
+                        {
+                            "x": 1.18,
+                            "y": 2.76
+                        }
+                    ]
+                },
+                {
+                    "coordinates": [
+                        {
+                            "x": 0.91,
+                            "y": 2.76
+                        },
+                        {
+                            "x": 0.94,
+                            "y": 2.76
+                        },
+                        {
+                            "x": 0.94,
+                            "y": 2.95
+                        },
+                        {
+                            "x": 0.86,
+                            "y": 2.95
+                        },
+                        {
+                            "x": 0.86,
+                            "y": 2.76
+                        },
+                        {
+                            "x": 0.89,
+                            "y": 2.76
+                        },
+                        {
+                            "x": 0.89,
+                            "y": 2.74
+                        },
+                        {
+                            "x": 0.86,
+                            "y": 2.74
+                        },
+                        {
+                            "x": 0.86,
+                            "y": 2.7
+                        },
+                        {
+                            "x": 0.94,
+                            "y": 2.7
+                        },
+                        {
+                            "x": 0.94,
+                            "y": 2.74
+                        },
+                        {
+                            "x": 0.91,
+                            "y": 2.74
+                        },
+                        {
+                            "x": 0.91,
+                            "y": 2.76
+                        }
+                    ]
+                }
+            ]
         },
         {
             "type": "CurtainWallSegment",
@@ -15561,8 +16599,92 @@ Response:
                 },
                 "height": 3,
                 "bottomOffset": 0,
-                "offset": 0
-            }
+                "offset": 0,
+                "flipped": true,
+                "begThickness": 0.3,
+                "endThickness": 0.3,
+                "compositeId": {
+                    "guid": "<GUID>"
+                },
+                "referenceLineLocation": "CoreOutside",
+                "slantAlpha": 1.570796327,
+                "slantBeta": 1.570796327,
+                "topOffset": 0,
+                "relativeTopStory": 0,
+                "zoneRel": "Boundary",
+                "visibility": {
+                    "showOnHome": false,
+                    "showAllAbove": false,
+                    "showAllBelow": false,
+                    "showRelAbove": 0,
+                    "showRelBelow": 0
+                },
+                "referenceMaterial": {
+                    "overridden": false
+                },
+                "oppositeMaterial": {
+                    "overridden": false
+                },
+                "sideMaterial": {
+                    "overridden": false
+                },
+                "cutFillPen": {
+                    "overridden": false
+                },
+                "cutFillBackgroundPen": {
+                    "overridden": false
+                }
+            },
+            "floorPlanPolygons": [
+                {
+                    "coordinates": [
+                        {
+                            "x": 0.404392127,
+                            "y": 0.550193281
+                        },
+                        {
+                            "x": 1.538392127,
+                            "y": 0.650193281
+                        },
+                        {
+                            "x": 1.534,
+                            "y": 0.7
+                        },
+                        {
+                            "x": 0.4,
+                            "y": 0.6
+                        },
+                        {
+                            "x": 0.404392127,
+                            "y": 0.550193281
+                        }
+                    ]
+                },
+                {
+                    "coordinates": [
+                        {
+                            "x": 0.4,
+                            "y": 0.6
+                        },
+                        {
+                            "x": 1.534,
+                            "y": 0.7
+                        },
+                        {
+                            "x": 1.512039366,
+                            "y": 0.949033593
+                        },
+                        {
+                            "x": 0.378039366,
+                            "y": 0.849033593
+                        },
+                        {
+                            "x": 0.4,
+                            "y": 0.6
+                        }
+                    ]
+                }
+            ]
         },
         {
             "type": "Wall",
@@ -15572,8 +16694,6 @@ Response:
             "id": "SW - 001",
             "details": {
                 "geometryType": "Trapezoid",
-                "begThickness": 0.2,
-                "endThickness": 0.25,
                 "structureType": "Basic",
                 "zCoordinate": 6.2,
                 "begCoordinate": {
@@ -15586,8 +16706,68 @@ Response:
                 },
                 "height": 2.8,
                 "bottomOffset": 0.2,
-                "offset": 0
-            }
+                "offset": 0,
+                "flipped": true,
+                "begThickness": 0.2,
+                "endThickness": 0.25,
+                "buildingMaterialId": {
+                    "guid": "<GUID>"
+                },
+                "referenceLineLocation": "Outside",
+                "slantAlpha": 1.570796327,
+                "slantBeta": 1.570796327,
+                "topOffset": 0,
+                "relativeTopStory": 0,
+                "zoneRel": "Boundary",
+                "visibility": {
+                    "showOnHome": false,
+                    "showAllAbove": false,
+                    "showAllBelow": false,
+                    "showRelAbove": 0,
+                    "showRelBelow": 0
+                },
+                "referenceMaterial": {
+                    "overridden": false
+                },
+                "oppositeMaterial": {
+                    "overridden": false
+                },
+                "sideMaterial": {
+                    "overridden": false
+                },
+                "cutFillPen": {
+                    "overridden": false
+                },
+                "cutFillBackgroundPen": {
+                    "overridden": false
+                }
+            },
+            "floorPlanPolygons": [
+                {
+                    "coordinates": [
+                        {
+                            "x": 0.4,
+                            "y": 1
+                        },
+                        {
+                            "x": 1.534,
+                            "y": 1.1
+                        },
+                        {
+                            "x": 1.512039366,
+                            "y": 1.349033593
+                        },
+                        {
+                            "x": 0.382431493,
+                            "y": 1.199226875
+                        },
+                        {
+                            "x": 0.4,
+                            "y": 1
+                        }
+                    ]
+                }
+            ]
         },
         {
             "type": "Wall",
@@ -15631,8 +16811,68 @@ Response:
                 },
                 "height": 2.5,
                 "bottomOffset": 0,
-                "offset": 0
-            }
+                "offset": 0,
+                "flipped": true,
+                "begThickness": 0,
+                "endThickness": 0,
+                "buildingMaterialId": {
+                    "guid": "<GUID>"
+                },
+                "referenceLineLocation": "Outside",
+                "slantAlpha": 1.570796327,
+                "slantBeta": 1.570796327,
+                "topOffset": 0,
+                "relativeTopStory": 0,
+                "zoneRel": "Boundary",
+                "visibility": {
+                    "showOnHome": false,
+                    "showAllAbove": false,
+                    "showAllBelow": false,
+                    "showRelAbove": 0,
+                    "showRelBelow": 0
+                },
+                "referenceMaterial": {
+                    "overridden": false
+                },
+                "oppositeMaterial": {
+                    "overridden": false
+                },
+                "sideMaterial": {
+                    "overridden": false
+                },
+                "cutFillPen": {
+                    "overridden": false
+                },
+                "cutFillBackgroundPen": {
+                    "overridden": false
+                }
+            },
+            "floorPlanPolygons": [
+                {
+                    "coordinates": [
+                        {
+                            "x": 1.35,
+                            "y": 0.4
+                        },
+                        {
+                            "x": 2.584,
+                            "y": 0.4
+                        },
+                        {
+                            "x": 2.584,
+                            "y": 0.65
+                        },
+                        {
+                            "x": 1.35,
+                            "y": 0.6
+                        },
+                        {
+                            "x": 1.35,
+                            "y": 0.4
+                        }
+                    ]
+                }
+            ]
         },
         {
             "type": "Wall",
@@ -15676,8 +16916,68 @@ Response:
                 },
                 "height": 3,
                 "bottomOffset": 0,
-                "offset": 0
-            }
+                "offset": 0,
+                "flipped": false,
+                "begThickness": 0,
+                "endThickness": 0,
+                "buildingMaterialId": {
+                    "guid": "<GUID>"
+                },
+                "referenceLineLocation": "Outside",
+                "slantAlpha": 1.570796327,
+                "slantBeta": 1.570796327,
+                "topOffset": 0,
+                "relativeTopStory": 1,
+                "zoneRel": "Boundary",
+                "visibility": {
+                    "showOnHome": false,
+                    "showAllAbove": false,
+                    "showAllBelow": false,
+                    "showRelAbove": 0,
+                    "showRelBelow": 0
+                },
+                "referenceMaterial": {
+                    "overridden": false
+                },
+                "oppositeMaterial": {
+                    "overridden": false
+                },
+                "sideMaterial": {
+                    "overridden": false
+                },
+                "cutFillPen": {
+                    "overridden": false
+                },
+                "cutFillBackgroundPen": {
+                    "overridden": false
+                }
+            },
+            "floorPlanPolygons": [
+                {
+                    "coordinates": [
+                        {
+                            "x": 4.328634698,
+                            "y": 1.273521209
+                        },
+                        {
+                            "x": 5.212474801,
+                            "y": 1.273521209
+                        },
+                        {
+                            "x": 4.625787836,
+                            "y": 2.622139298
+                        },
+                        {
+                            "x": 4.084816738,
+                            "y": 2.622139298
+                        },
+                        {
+                            "x": 4.328634698,
+                            "y": 1.273521209
+                        }
+                    ]
+                }
+            ]
         },
         {
             "type": "Wall",
@@ -15700,8 +17000,68 @@ Response:
                 },
                 "height": 3,
                 "bottomOffset": 0,
-                "offset": 0
-            }
+                "offset": 0,
+                "flipped": true,
+                "begThickness": 0.3,
+                "endThickness": 0.3,
+                "buildingMaterialId": {
+                    "guid": "<GUID>"
+                },
+                "referenceLineLocation": "Outside",
+                "slantAlpha": 1.570796327,
+                "slantBeta": 1.570796327,
+                "topOffset": 0,
+                "relativeTopStory": 1,
+                "zoneRel": "Boundary",
+                "visibility": {
+                    "showOnHome": false,
+                    "showAllAbove": false,
+                    "showAllBelow": false,
+                    "showRelAbove": 0,
+                    "showRelBelow": 0
+                },
+                "referenceMaterial": {
+                    "overridden": false
+                },
+                "oppositeMaterial": {
+                    "overridden": false
+                },
+                "sideMaterial": {
+                    "overridden": false
+                },
+                "cutFillPen": {
+                    "overridden": false
+                },
+                "cutFillBackgroundPen": {
+                    "overridden": false
+                }
+            },
+            "floorPlanPolygons": [
+                {
+                    "coordinates": [
+                        {
+                            "x": 6.263901967,
+                            "y": 0.872771563
+                        },
+                        {
+                            "x": 7.57215771,
+                            "y": 0.972771563
+                        },
+                        {
+                            "x": 7.549293112,
+                            "y": 1.271898978
+                        },
+                        {
+                            "x": 6.241037369,
+                            "y": 1.171898978
+                        },
+                        {
+                            "x": 6.263901967,
+                            "y": 0.872771563
+                        }
+                    ]
+                }
+            ]
         },
         {
             "type": "Wall",
@@ -15724,8 +17084,68 @@ Response:
                 },
                 "height": 3,
                 "bottomOffset": 0,
-                "offset": 0
-            }
+                "offset": 0,
+                "flipped": true,
+                "begThickness": 0.3,
+                "endThickness": 0.3,
+                "buildingMaterialId": {
+                    "guid": "<GUID>"
+                },
+                "referenceLineLocation": "Outside",
+                "slantAlpha": 1.570796327,
+                "slantBeta": 1.570796327,
+                "topOffset": 0,
+                "relativeTopStory": 1,
+                "zoneRel": "Boundary",
+                "visibility": {
+                    "showOnHome": false,
+                    "showAllAbove": false,
+                    "showAllBelow": false,
+                    "showRelAbove": 0,
+                    "showRelBelow": 0
+                },
+                "referenceMaterial": {
+                    "overridden": false
+                },
+                "oppositeMaterial": {
+                    "overridden": false
+                },
+                "sideMaterial": {
+                    "overridden": false
+                },
+                "cutFillPen": {
+                    "overridden": false
+                },
+                "cutFillBackgroundPen": {
+                    "overridden": false
+                }
+            },
+            "floorPlanPolygons": [
+                {
+                    "coordinates": [
+                        {
+                            "x": 7.67215771,
+                            "y": 0.872771563
+                        },
+                        {
+                            "x": 7.57215771,
+                            "y": 2.381027306
+                        },
+                        {
+                            "x": 7.374524316,
+                            "y": 2.155326084
+                        },
+                        {
+                            "x": 7.446456488,
+                            "y": 1.070404957
+                        },
+                        {
+                            "x": 7.67215771,
+                            "y": 0.872771563
+                        }
+                    ]
+                }
+            ]
         },
         {
             "type": "Wall",
@@ -15748,8 +17168,68 @@ Response:
                 },
                 "height": 3,
                 "bottomOffset": 0,
-                "offset": 0
-            }
+                "offset": 0,
+                "flipped": true,
+                "begThickness": 0.3,
+                "endThickness": 0.3,
+                "buildingMaterialId": {
+                    "guid": "<GUID>"
+                },
+                "referenceLineLocation": "Outside",
+                "slantAlpha": 1.570796327,
+                "slantBeta": 1.570796327,
+                "topOffset": 0,
+                "relativeTopStory": 1,
+                "zoneRel": "Boundary",
+                "visibility": {
+                    "showOnHome": false,
+                    "showAllAbove": false,
+                    "showAllBelow": false,
+                    "showRelAbove": 0,
+                    "showRelBelow": 0
+                },
+                "referenceMaterial": {
+                    "overridden": false
+                },
+                "oppositeMaterial": {
+                    "overridden": false
+                },
+                "sideMaterial": {
+                    "overridden": false
+                },
+                "cutFillPen": {
+                    "overridden": false
+                },
+                "cutFillBackgroundPen": {
+                    "overridden": false
+                }
+            },
+            "floorPlanPolygons": [
+                {
+                    "coordinates": [
+                        {
+                            "x": 7.67215771,
+                            "y": 2.281027306
+                        },
+                        {
+                            "x": 6.163901967,
+                            "y": 2.381027306
+                        },
+                        {
+                            "x": 6.144055016,
+                            "y": 2.081684528
+                        },
+                        {
+                            "x": 7.652310759,
+                            "y": 1.981684528
+                        },
+                        {
+                            "x": 7.67215771,
+                            "y": 2.281027306
+                        }
+                    ]
+                }
+            ]
         },
         {
             "type": "Wall",
@@ -15772,8 +17252,68 @@ Response:
                 },
                 "height": 3,
                 "bottomOffset": 0,
-                "offset": 0
-            }
+                "offset": 0,
+                "flipped": true,
+                "begThickness": 0.3,
+                "endThickness": 0.3,
+                "buildingMaterialId": {
+                    "guid": "<GUID>"
+                },
+                "referenceLineLocation": "Outside",
+                "slantAlpha": 1.570796327,
+                "slantBeta": 1.570796327,
+                "topOffset": 0,
+                "relativeTopStory": 1,
+                "zoneRel": "Boundary",
+                "visibility": {
+                    "showOnHome": false,
+                    "showAllAbove": false,
+                    "showAllBelow": false,
+                    "showRelAbove": 0,
+                    "showRelBelow": 0
+                },
+                "referenceMaterial": {
+                    "overridden": false
+                },
+                "oppositeMaterial": {
+                    "overridden": false
+                },
+                "sideMaterial": {
+                    "overridden": false
+                },
+                "cutFillPen": {
+                    "overridden": false
+                },
+                "cutFillBackgroundPen": {
+                    "overridden": false
+                }
+            },
+            "floorPlanPolygons": [
+                {
+                    "coordinates": [
+                        {
+                            "x": 6.263901967,
+                            "y": 2.281027306
+                        },
+                        {
+                            "x": 6.163901967,
+                            "y": 0.972771563
+                        },
+                        {
+                            "x": 6.463029382,
+                            "y": 0.949906965
+                        },
+                        {
+                            "x": 6.563029382,
+                            "y": 2.258162708
+                        },
+                        {
+                            "x": 6.263901967,
+                            "y": 2.281027306
+                        }
+                    ]
+                }
+            ]
         },
         {
             "type": "Column",
@@ -15788,7 +17328,46 @@ Response:
                 },
                 "zCoordinate": 3.3,
                 "height": 2.5,
-                "bottomOffset": 0.3
+                "bottomOffset": 0.3,
+                "axisRotationAngle": 0,
+                "isSlanted": false,
+                "slantAngle": 1.570796327,
+                "slantDirectionAngle": 0,
+                "isFlipped": false,
+                "wrapping": false,
+                "topOffset": -0.2,
+                "relativeTopStory": 0,
+                "cutFillPen": {
+                    "overridden": false
+                },
+                "cutFillBackgroundPen": {
+                    "overridden": false
+                },
+                "coverFill": {
+                    "use": true,
+                    "useFromSurface": false,
+                    "orientationComesFrom3D": false,
+                    "fillId": {
+                        "guid": "<GUID>"
+                    },
+                    "foregroundPen": 88,
+                    "backgroundPen": -1,
+                    "transformationType": "Global",
+                    "transformation": {
+                        "origin": {
+                            "x": 0,
+                            "y": 0
+                        },
+                        "xAxis": {
+                            "x": 1,
+                            "y": 0
+                        },
+                        "yAxis": {
+                            "x": 0,
+                            "y": 1
+                        }
+                    }
+                }
             }
         },
         {
@@ -15804,7 +17383,46 @@ Response:
                 },
                 "zCoordinate": 3,
                 "height": 2.8,
-                "bottomOffset": 0
+                "bottomOffset": 0,
+                "axisRotationAngle": 0,
+                "isSlanted": false,
+                "slantAngle": 1.570796327,
+                "slantDirectionAngle": 0,
+                "isFlipped": false,
+                "wrapping": false,
+                "topOffset": -0.2,
+                "relativeTopStory": 0,
+                "cutFillPen": {
+                    "overridden": false
+                },
+                "cutFillBackgroundPen": {
+                    "overridden": false
+                },
+                "coverFill": {
+                    "use": true,
+                    "useFromSurface": false,
+                    "orientationComesFrom3D": false,
+                    "fillId": {
+                        "guid": "<GUID>"
+                    },
+                    "foregroundPen": 88,
+                    "backgroundPen": -1,
+                    "transformationType": "Global",
+                    "transformation": {
+                        "origin": {
+                            "x": 0,
+                            "y": 0
+                        },
+                        "xAxis": {
+                            "x": 1,
+                            "y": 0
+                        },
+                        "yAxis": {
+                            "x": 0,
+                            "y": 1
+                        }
+                    }
+                }
             }
         },
         {
@@ -15827,7 +17445,44 @@ Response:
                 "offset": 0,
                 "slantAngle": 0,
                 "arcAngle": 0,
-                "verticalCurveHeight": 0
+                "verticalCurveHeight": 0,
+                "beamShape": "Straight",
+                "isSlanted": false,
+                "isFlipped": false,
+                "profileAngle": 0,
+                "anchorPoint": "TopCenter",
+                "cutFillPen": {
+                    "overridden": false
+                },
+                "cutFillBackgroundPen": {
+                    "overridden": false
+                },
+                "coverFill": {
+                    "use": true,
+                    "useFromSurface": false,
+                    "orientationComesFrom3D": false,
+                    "fillId": {
+                        "guid": "<GUID>"
+                    },
+                    "foregroundPen": 90,
+                    "backgroundPen": -1,
+                    "transformationType": "Global",
+                    "transformation": {
+                        "origin": {
+                            "x": 0,
+                            "y": 0
+                        },
+                        "xAxis": {
+                            "x": 1,
+                            "y": 0
+                        },
+                        "yAxis": {
+                            "x": 0,
+                            "y": 1
+                        }
+                    }
+                },
+                "holes": []
             }
         },
         {
@@ -15850,7 +17505,44 @@ Response:
                 "offset": 0,
                 "slantAngle": 0,
                 "arcAngle": 0,
-                "verticalCurveHeight": 0
+                "verticalCurveHeight": 0,
+                "beamShape": "Straight",
+                "isSlanted": false,
+                "isFlipped": false,
+                "profileAngle": 0,
+                "anchorPoint": "TopCenter",
+                "cutFillPen": {
+                    "overridden": false
+                },
+                "cutFillBackgroundPen": {
+                    "overridden": false
+                },
+                "coverFill": {
+                    "use": true,
+                    "useFromSurface": false,
+                    "orientationComesFrom3D": false,
+                    "fillId": {
+                        "guid": "<GUID>"
+                    },
+                    "foregroundPen": 90,
+                    "backgroundPen": -1,
+                    "transformationType": "Global",
+                    "transformation": {
+                        "origin": {
+                            "x": 0,
+                            "y": 0
+                        },
+                        "xAxis": {
+                            "x": 1,
+                            "y": 0
+                        },
+                        "yAxis": {
+                            "x": 0,
+                            "y": 1
+                        }
+                    }
+                },
+                "holes": []
             }
         },
         {
@@ -20605,6 +22297,46 @@ Response:
                 "level": 0,
                 "offsetFromTop": 0.1,
                 "zCoordinate": 3,
+                "referencePlaneLocation": "CoreTop",
+                "compositeId": {
+                    "guid": "<GUID>"
+                },
+                "topMaterial": {
+                    "overridden": false
+                },
+                "sideMaterial": {
+                    "overridden": false
+                },
+                "bottomMaterial": {
+                    "overridden": false
+                },
+                "cutFillPen": {
+                    "overridden": false
+                },
+                "cutFillBackgroundPen": {
+                    "overridden": false
+                },
+                "floorFill": {
+                    "use": false,
+                    "foregroundPen": 89,
+                    "backgroundPen": -1,
+                    "fillId": {
+                        "guid": "<GUID>"
+                    },
+                    "use3DHatching": false,
+                    "orientation": {
+                        "type": "Global",
+                        "origin": {
+                            "x": 0,
+                            "y": 0
+                        },
+                        "matrix00": 1,
+                        "matrix10": 0,
+                        "matrix01": 0,
+                        "matrix11": 1,
+                        "innerRadius": 0
+                    }
+                },
                 "polygonOutline": [
                     {
                         "x": 2.218574919,
@@ -20646,6 +22378,46 @@ Response:
                 "level": 0,
                 "offsetFromTop": 0.1,
                 "zCoordinate": 3,
+                "referencePlaneLocation": "CoreTop",
+                "compositeId": {
+                    "guid": "<GUID>"
+                },
+                "topMaterial": {
+                    "overridden": false
+                },
+                "sideMaterial": {
+                    "overridden": false
+                },
+                "bottomMaterial": {
+                    "overridden": false
+                },
+                "cutFillPen": {
+                    "overridden": false
+                },
+                "cutFillBackgroundPen": {
+                    "overridden": false
+                },
+                "floorFill": {
+                    "use": false,
+                    "foregroundPen": 89,
+                    "backgroundPen": -1,
+                    "fillId": {
+                        "guid": "<GUID>"
+                    },
+                    "use3DHatching": false,
+                    "orientation": {
+                        "type": "Global",
+                        "origin": {
+                            "x": 0,
+                            "y": 0
+                        },
+                        "matrix00": 1,
+                        "matrix10": 0,
+                        "matrix01": 0,
+                        "matrix11": 1,
+                        "innerRadius": 0
+                    }
+                },
                 "polygonOutline": [
                     {
                         "x": 4.054339493,
@@ -20726,6 +22498,11 @@ Response:
                 "level": -0.2,
                 "skirtType": "SolidBodyWithSkirt",
                 "skirtLevel": 1,
+                "ridges": "AllSharp",
+                "showLines": true,
+                "contourPen": 53,
+                "levelPen": 73,
+                "lineTypeIndex": 1,
                 "polygonCoordinates": [
                     {
                         "x": 7.60071433,
@@ -21031,7 +22808,20 @@ Response:
                 "ownerElementId": {
                     "guid": "<GUID>"
                 },
-                "ownerElementType": "Zone"
+                "ownerElementType": "Zone",
+                "begCoordinate": {
+                    "x": 6.014296819,
+                    "y": 2.421236571
+                },
+                "midCoordinate": {
+                    "x": 7.014296819,
+                    "y": 3.421236571
+                },
+                "endCoordinate": {
+                    "x": 8.014296819,
+                    "y": 3.421236571
+                },
+                "hasLeaderLine": true
             }
         },
         {
@@ -21053,7 +22843,20 @@ Response:
                 "ownerElementId": {
                     "guid": "<GUID>"
                 },
-                "ownerElementType": "Zone"
+                "ownerElementType": "Zone",
+                "begCoordinate": {
+                    "x": 6.589801649,
+                    "y": 0.890879072
+                },
+                "midCoordinate": {
+                    "x": 7.589801649,
+                    "y": 1.890879072
+                },
+                "endCoordinate": {
+                    "x": 8.589801649,
+                    "y": 1.890879072
+                },
+                "hasLeaderLine": true
             }
         },
         {
@@ -21253,8 +23056,59 @@ Response:
             "id": "CW-001",
             "details": {
                 "height": 3,
-                "angle": 90
-            }
+                "angle": 90,
+                "flipped": false
+            },
+            "floorPlanPolygons": [
+                {
+                    "coordinates": [
+                        {
+                            "x": 0.02,
+                            "y": 2.74
+                        },
+                        {
+                            "x": 0.89,
+                            "y": 2.74
+                        },
+                        {
+                            "x": 0.89,
+                            "y": 2.76
+                        },
+                        {
+                            "x": 0.02,
+                            "y": 2.76
+                        },
+                        {
+                            "x": 0.02,
+                            "y": 2.74
+                        }
+                    ]
+                },
+                {
+                    "coordinates": [
+                        {
+                            "x": 0.91,
+                            "y": 2.74
+                        },
+                        {
+                            "x": 1.18,
+                            "y": 2.74
+                        },
+                        {
+                            "x": 1.18,
+                            "y": 2.76
+                        },
+                        {
+                            "x": 0.91,
+                            "y": 2.76
+                        },
+                        {
+                            "x": 0.91,
+                            "y": 2.74
+                        }
+                    ]
+                }
+            ]
         },
         {
             "type": "CurtainWallSegment",

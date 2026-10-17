@@ -169,6 +169,190 @@ static bool SetParamValueString (API_ChangeParamType& changeParam,
     return false;
 }
 
+static bool SetValueInteger (API_AddParType& actParam, const GS::ObjectState& parameterDetails)
+{
+    Int32 value;
+    if (parameterDetails.Get (ParameterValueFieldName, value)) {
+        actParam.value.real = value;
+        return true;
+    }
+    return false;
+}
+
+static bool SetValueDouble (API_AddParType& actParam, const GS::ObjectState& parameterDetails)
+{
+    double value;
+    if (parameterDetails.Get (ParameterValueFieldName, value)) {
+        actParam.value.real = value;
+        return true;
+    }
+    return false;
+}
+
+static bool SetValueOnOff (API_AddParType& actParam, const GS::ObjectState& parameterDetails)
+{
+    GS::String value;
+    if (parameterDetails.Get (ParameterValueFieldName, value)) {
+        actParam.value.real = (value == "Off" ? 0 : 1);
+        return true;
+    }
+    return false;
+}
+
+static bool SetValueBool (API_AddParType& actParam, const GS::ObjectState& parameterDetails)
+{
+    bool value;
+    if (parameterDetails.Get (ParameterValueFieldName, value)) {
+        actParam.value.real = (value ? 1 : 0);
+        return true;
+    }
+    return false;
+}
+
+static bool SetValueString (API_AddParType& actParam, const GS::ObjectState& parameterDetails)
+{
+    GS::UniString value;
+    if (parameterDetails.Get (ParameterValueFieldName, value)) {
+        constexpr USize MaxStrValueLength = API_UAddParStrLen - 1;
+        GS::ucscpy (actParam.value.uStr, value.ToUStr (0, GS::Min (value.GetLength (), MaxStrValueLength)).Get ());
+        return true;
+    }
+    return false;
+}
+
+static API_AddParType* FindAddParByNameOrIndex (API_AddParType** memoParams,
+                                                 GSSize nParams,
+                                                 const GS::ObjectState& parameter,
+                                                 const API_Guid& elemGuid,
+                                                 GS::UniString& errMessage)
+{
+    GS::String name;
+    if (parameter.Get ("name", name)) {
+        for (GSIndex ii = 0; ii < nParams; ++ii) {
+            API_AddParType& actParam = (*memoParams)[ii];
+            if (actParam.typeID != APIParT_Separator && name == actParam.name) {
+                return &actParam;
+            }
+        }
+        errMessage = GS::UniString::Printf ("Invalid input: %s is not a GDL parameter of element %T", name.ToCStr (), APIGuidToString (elemGuid).ToPrintf ());
+        return nullptr;
+    }
+
+    short index;
+    if (parameter.Get ("index", index)) {
+        for (GSIndex ii = 0; ii < nParams; ++ii) {
+            API_AddParType& actParam = (*memoParams)[ii];
+            if (actParam.typeID != APIParT_Separator && actParam.index == index) {
+                return &actParam;
+            }
+        }
+        errMessage = GS::UniString::Printf ("Invalid input: no GDL parameter with index %d for element %T", index, APIGuidToString (elemGuid).ToPrintf ());
+        return nullptr;
+    }
+
+    errMessage = "Invalid input: both name and index are missing, one of them must be set!";
+    return nullptr;
+}
+
+// OpenParameters needs a resolvable libInd (only known for a fixed list of element types, see the
+// analogous read-side fallback in GetGDLParametersOfElementsCommand::Execute) and fails outright
+// for element types outside that list, e.g. Railing subelements. Fall back to editing the
+// element's own memo.params directly and committing via ACAPI_Element_Change -
+// ACAPI_Element_ChangeMemo's own doc comment says it currently only supports
+// APIMemoMask_Polygon and recommends ACAPI_Element_Change instead, which is also the exact call
+// already used for the session-based path's own final commit a few lines below.
+static GSErrCode SetGDLParametersViaMemoFallback (const API_Guid& elemGuid,
+                                                   const GS::Array<GS::ObjectState>& elemGdlParameters,
+                                                   GS::UniString& errMessage)
+{
+    API_ElementMemo memo = {};
+    const GS::OnExit disposeMemo ([&memo] () { ACAPI_DisposeElemMemoHdls (&memo); });
+    GSErrCode err = ACAPI_Element_GetMemo (elemGuid, &memo, APIMemoMask_AddPars);
+    if (err != NoError || memo.params == nullptr) {
+        errMessage = GS::UniString::Printf ("Failed to get parameters of element with guid %T!", APIGuidToString (elemGuid).ToPrintf ());
+        return err != NoError ? err : APIERR_BADPARS;
+    }
+
+    const GSSize nParams = BMGetHandleSize ((GSHandle) memo.params) / sizeof (API_AddParType);
+
+    for (const GS::ObjectState& elemGdlParametersItem : elemGdlParameters) {
+        API_AddParType* actParam = FindAddParByNameOrIndex (memo.params, nParams, elemGdlParametersItem, elemGuid, errMessage);
+        if (actParam == nullptr) {
+            return APIERR_BADPARS;
+        }
+
+        if (!elemGdlParametersItem.Contains (ParameterValueFieldName)) {
+            errMessage = GS::UniString::Printf ("Invalid input: value is missing for parameter %s of element %T", actParam->name, APIGuidToString (elemGuid).ToPrintf ());
+            return APIERR_BADPARS;
+        }
+
+        if (actParam->typeMod != API_ParSimple) {
+            errMessage = GS::UniString::Printf ("Invalid input: array parameters are not supported via the memo fallback for parameter %s of element %T", actParam->name, APIGuidToString (elemGuid).ToPrintf ());
+            return APIERR_BADPARS;
+        }
+
+        bool ok = true;
+        switch (actParam->typeID) {
+            case APIParT_Integer:
+            case APIParT_PenCol:
+            case APIParT_LineTyp:
+            case APIParT_Mater:
+            case APIParT_FillPat:
+            case APIParT_BuildingMaterial:
+            case APIParT_Profile:
+                ok = SetValueInteger (*actParam, elemGdlParametersItem);
+                break;
+            case APIParT_ColRGB:
+            case APIParT_Intens:
+            case APIParT_Length:
+            case APIParT_RealNum:
+            case APIParT_Angle:
+                ok = SetValueDouble (*actParam, elemGdlParametersItem);
+                break;
+            case APIParT_LightSw:
+                ok = SetValueOnOff (*actParam, elemGdlParametersItem);
+                break;
+            case APIParT_Boolean:
+                ok = SetValueBool (*actParam, elemGdlParametersItem);
+                break;
+            case APIParT_CString:
+            case APIParT_Title:
+                ok = SetValueString (*actParam, elemGdlParametersItem);
+                break;
+            default:
+                errMessage = GS::UniString::Printf ("Invalid input: parameter type of %s is not supported for writing", actParam->name);
+                return APIERR_BADPARS;
+        }
+        if (!ok) {
+            errMessage = GS::UniString::Printf ("Invalid input: the given value has the wrong type for parameter %s of element %T", actParam->name, APIGuidToString (elemGuid).ToPrintf ());
+            return APIERR_BADPARS;
+        }
+    }
+
+    API_Element element = {};
+    element.header.guid = elemGuid;
+    err = ACAPI_Element_Get (&element);
+    if (err != NoError) {
+        errMessage = GS::UniString::Printf ("Failed to get element with guid %T", APIGuidToString (elemGuid).ToPrintf ());
+        return err;
+    }
+
+    if (GetElemTypeId (element.header) != API_RailingPostID) {
+        errMessage = GS::UniString::Printf ("Writing GDL parameters via the memo fallback is currently only implemented for Railing Posts, not for element with guid %T", APIGuidToString (elemGuid).ToPrintf ());
+        return APIERR_BADPARS;
+    }
+
+    // Per Graphisoft support (forum thread on this exact question): call ACAPI_Element_Change
+    // directly on the sub-element's own guid, with a literal nullptr mask (not a pointer to an
+    // empty/fully-set API_Element mask struct - those are NOT equivalent and were tried/rejected
+    // with APIERR_BADPARS before asking). memoMask is APIMemoMask_AddPars only; withdel=true.
+    err = ACAPI_Element_Change (&element, nullptr, &memo, APIMemoMask_AddPars, true);
+    if (err != NoError) {
+        errMessage = GS::UniString::Printf ("Failed to change parameters of element with guid %T (GSErrCode=%d)", APIGuidToString (elemGuid).ToPrintf (), (int) err);
+    }
+    return err;
+}
+
 GetGDLParametersOfElementsCommand::GetGDLParametersOfElementsCommand () :
     CommandBase (CommonSchema::Used)
 {
@@ -256,8 +440,68 @@ GS::ObjectState	GetGDLParametersOfElementsCommand::Execute (const GS::ObjectStat
         }
 
         if (err != NoError) {
-            const GS::UniString errorMsg = GS::UniString::Printf ("Failed to get parameters of element with guid %T!", APIGuidToString (paramOwner.guid).ToPrintf ());
-            elemGdlParameterListAdder (CreateErrorResponse (err, errorMsg));
+            // OpenParameters/GetActParameters needs a resolvable libInd (only known for a fixed
+            // list of types above) and fails outright for element types outside that list, e.g.
+            // Railing subelements. Fall back to reading the element's own memo.params directly
+            // (per GRAPHISOFT support guidance) - values live directly on API_AddParType.value,
+            // no open-parameters session required, just without the display name / possible-value
+            // list / locked-state extras that session only provides.
+            API_ElementMemo memo = {};
+            const GS::OnExit disposeMemo ([&memo] () { ACAPI_DisposeElemMemoHdls (&memo); });
+            GSErrCode memoErr = ACAPI_Element_GetMemo (paramOwner.guid, &memo, APIMemoMask_AddPars);
+            if (memoErr != NoError || memo.params == nullptr) {
+                const GS::UniString errorMsg = GS::UniString::Printf ("Failed to get parameters of element with guid %T!", APIGuidToString (paramOwner.guid).ToPrintf ());
+                elemGdlParameterListAdder (CreateErrorResponse (err, errorMsg));
+                continue;
+            }
+
+            const GSSize nFallbackParams = BMGetHandleSize ((GSHandle) memo.params) / sizeof (API_AddParType);
+            GS::ObjectState fallbackGdlParameters;
+            const auto& fallbackParameterListAdder = fallbackGdlParameters.AddList<GS::ObjectState> ("parameters");
+            for (GSIndex ii = 0; ii < nFallbackParams; ++ii) {
+                const API_AddParType& actParam = (*memo.params)[ii];
+                if (actParam.typeID == APIParT_Separator) {
+                    continue;
+                }
+
+                GS::ObjectState gdlParameterDetails;
+                gdlParameterDetails.Add ("name", actParam.name);
+                gdlParameterDetails.Add ("index", actParam.index);
+                gdlParameterDetails.Add ("type", ConvertAddParIDToString (actParam.typeID));
+                gdlParameterDetails.Add ("viaMemoFallback", true);
+                switch (actParam.typeID) {
+                    case APIParT_Integer:
+                    case APIParT_PenCol:
+                    case APIParT_LineTyp:
+                    case APIParT_Mater:
+                    case APIParT_FillPat:
+                    case APIParT_BuildingMaterial:
+                    case APIParT_Profile:
+                        AddValueInteger (gdlParameterDetails, actParam);
+                        break;
+                    case APIParT_ColRGB:
+                    case APIParT_Intens:
+                    case APIParT_Length:
+                    case APIParT_RealNum:
+                    case APIParT_Angle:
+                        AddValueDouble (gdlParameterDetails, actParam);
+                        break;
+                    case APIParT_LightSw:
+                        AddValueOnOff (gdlParameterDetails, actParam);
+                        break;
+                    case APIParT_Boolean:
+                        AddValueBool (gdlParameterDetails, actParam);
+                        break;
+                    case APIParT_CString:
+                    case APIParT_Title:
+                        AddValueString (gdlParameterDetails, actParam);
+                        break;
+                    default:
+                        break;
+                }
+                fallbackParameterListAdder (gdlParameterDetails);
+            }
+            elemGdlParameterListAdder (fallbackGdlParameters);
             continue;
         }
 
@@ -512,12 +756,21 @@ GS::ObjectState	SetGDLParametersOfElementsCommand::Execute (const GS::ObjectStat
             }
 
             const API_Guid elemGuid = GetGuidFromObjectState (*elementId);
+
+            API_Element apiElement = {};
+            apiElement.header.guid = elemGuid;
+            err = ACAPI_Element_Get (&apiElement);
+            if (err != NoError) {
+                executionResults (CreateFailedExecutionResult (err, GS::UniString::Printf ("Not found element with guid %T!", APIGuidToString (elemGuid).ToPrintf ())));
+                continue;
+            }
+
             API_ParamOwnerType paramOwner = {};
             paramOwner.libInd = 0;
 #ifdef ServerMainVers_2600
-            paramOwner.type = API_ObjectID;
+            paramOwner.type = apiElement.header.type;
 #else
-            paramOwner.typeID = API_ObjectID;
+            paramOwner.typeID = apiElement.header.typeID;
 #endif
             paramOwner.guid = elemGuid;
 
@@ -608,6 +861,8 @@ GS::ObjectState	SetGDLParametersOfElementsCommand::Execute (const GS::ObjectStat
                 }
                 ACAPI_LibraryPart_CloseParameters ();
                 ACAPI_DisposeAddParHdl (&getParams.params);
+            } else {
+                err = SetGDLParametersViaMemoFallback (elemGuid, elemGdlParameters, errMessage);
             }
 
             if (err != NoError) {
