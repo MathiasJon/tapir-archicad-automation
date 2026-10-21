@@ -162,6 +162,11 @@ static GS::HashTable<API_Guid, GS::Array<GS::UniString>> GetAttributeFolderPaths
     // API_AttributeFolder::guid is a GS::Guid (unlike API_Attr_Head::guid), so the root folder is selected by GS::NULLGuid.
     rootFolder.guid = GS::NULLGuid;
     if (ACAPI_Attribute_GetFolder (rootFolder) == NoError) {
+        // Archicad returns the root folder with its own localized name as path (e.g. "Layers"), and every
+        // subfolder path starts with it. Paths are reported relative to the root, the same form the folder
+        // commands take as input, so the root starts from an empty path and the subfolder paths are rebuilt
+        // from it below (their API path is one level deeper than expected).
+        rootFolder.path.Clear ();
         CollectAttributeFolderPaths (rootFolder, folderPathsByAttribute);
     }
     return folderPathsByAttribute;
@@ -481,9 +486,19 @@ GS::ObjectState ActivateLayerCombinationCommand::Execute (const GS::ObjectState&
     API_Attribute attribute = {};
     attribute.header.typeID = API_LayerCombID;
     attribute.header.guid = GetGuidFromObjectState (attributeId);
+    const API_Guid requestedGuid = attribute.header.guid;
     GSErrCode err = ACAPI_Attribute_Get (&attribute);
     if (err != NoError) {
         return CreateFailedExecutionResult (err, "Layer combination not found.");
+    }
+
+    // A lookup by guid also finds attributes of other types (the guid of a Layer returned the Layer, whose index
+    // then activated an unrelated layer combination). Reading the layer combination back by that index tells them apart.
+    API_Attribute layerComb = {};
+    layerComb.header.typeID = API_LayerCombID;
+    layerComb.header.index = attribute.header.index;
+    if (attribute.header.typeID != API_LayerCombID || ACAPI_Attribute_Get (&layerComb) != NoError || layerComb.header.guid != requestedGuid) {
+        return CreateFailedExecutionResult (APIERR_BADID, "Layer combination not found.");
     }
 
     // Applies the combination to the current window, like choosing it in the
@@ -2915,25 +2930,14 @@ GS::ObjectState CreateAttributeFoldersCommand::Execute (const GS::ObjectState& p
             continue;
         }
 
-        // Created level by level from the root, so a missing parent folder is created too and an existing one,
-        // including the requested folder itself, is kept as it is.
-        GSErrCode err = NoError;
-        API_AttributeFolder current;
-        current.typeID = folder.typeID;
-        current.guid = GS::Guid ();
-        for (const GS::UniString& folderName : folder.path) {
-            current.path.Push (folderName);
-            if (FindAttributeFolder (current)) {
-                continue;
-            }
-            err = ACAPI_Attribute_CreateFolder (current);
-            if (err != NoError) {
-                break;
-            }
-        }
+        // ACAPI_Attribute_CreateFolder creates every missing folder along the full path and keeps the existing
+        // ones (returning NoError when the whole path already exists), so one call per item is enough. It is
+        // an in/out parameter that rewrites path and guid, so it is given a copy.
+        API_AttributeFolder toCreate = folder;
+        const GSErrCode err = ACAPI_Attribute_CreateFolder (toCreate);
         if (err != NoError) {
             executionResults (CreateFailedExecutionResult (err,
-                GS::UniString::Printf ("Failed to create attribute folder '%T'.", GetAttributeFolderPathString (current.path).ToPrintf ())));
+                GS::UniString::Printf ("Failed to create attribute folder '%T'.", GetAttributeFolderPathString (folder.path).ToPrintf ())));
             continue;
         }
 
