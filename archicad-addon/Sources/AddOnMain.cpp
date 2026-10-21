@@ -882,6 +882,17 @@ GSErrCode Initialize (void)
         err |= RegisterCommand<MoveAttributesAndFoldersCommand> (
             attributeCommands, "1.7.2",
             "Moves attributes and attribute folders (with their contents) into the target folder, which must be of the same attribute type; an empty target path is the root folder. Returns one execution result per attribute and per folder. Available from Archicad 26."
+        err |= RegisterCommand<GetUsedAttributesCommand> (
+            attributeCommands, "1.7.3",
+            "Gets the attributes in use, as Archicad reports them for the usedAttributes JSON query: parsed into usedAttributes when the report is a JSON object, otherwise as text in raw. Helps to find the attributes DeleteAttributes can remove before a handover. Available from Archicad 27."
+        );
+        err |= RegisterCommand<ConsolidateLinesCommand> (
+            attributeCommands, "1.7.3",
+            "Runs the Line Consolidation menu command of Archicad on the current window, as the menu does, and reports whether it ran together with what Archicad answered. Available from Archicad 27."
+        );
+        err |= RegisterCommand<ConsolidateFillsCommand> (
+            attributeCommands, "1.7.3",
+            "Runs the Fill Consolidation menu command of Archicad on the current window, as the menu does, and reports whether it ran together with what Archicad answered. Available from Archicad 27."
         );
         err |= RegisterCommand<CreateLayersCommand> (
             attributeCommands, "1.0.3",
