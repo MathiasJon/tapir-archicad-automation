@@ -105,6 +105,7 @@
 // The current window's layer combination (APIdefs_Environment.h): par1 is the
 // API_AttributeIndex of the layer combination to apply.
 #define ACAPI_Navigator_ChangeCurrLayerComb(par1) ACAPI_Environment (APIEnv_ChangeCurrLayerCombID, par1)
+#define ACAPI_Navigator_GetCurrLayerComb(par1) ACAPI_Environment (APIEnv_GetCurrLayerCombID, par1)
 #define ACAPI_Database_NewDatabase(par1) ACAPI_Database (APIDb_NewDatabaseID, par1)
 
 inline GSErrCode ACAPI_Navigator_ChangeLayoutSets (const API_LayoutInfo* layoutInfo, API_DatabaseUnId* databaseUnId)

@@ -930,6 +930,9 @@ GSErrCode Initialize (void)
         err |= RegisterCommand<ActivateLayerCombinationCommand> (
             attributeCommands, "1.7.2",
             "Activates the given layer combination in the current window, like choosing it in the Quick Layers palette. Saved views are not changed."
+        err |= RegisterCommand<GetCurrentLayerCombinationCommand> (
+            attributeCommands, "1.7.2",
+            "Returns the layer combination in effect in the current window. No layer combination is returned when the current state of the layers matches none."
         );
         err |= RegisterCommand<GetLinesCommand> (
             attributeCommands, "1.5.4",
