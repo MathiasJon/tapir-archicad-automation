@@ -883,6 +883,7 @@ GSErrCode Initialize (void)
         err |= RegisterCommand<MoveAttributesAndFoldersCommand> (
             attributeCommands, "1.7.2",
             "Moves attributes and attribute folders (with their contents) into the target folder, which must be of the same attribute type; an empty target path is the root folder. Returns one execution result per attribute and per folder. Available from Archicad 26."
+        );
         err |= RegisterCommand<GetUsedAttributesCommand> (
             attributeCommands, "1.7.3",
             "Gets the attributes in use, as Archicad reports them for the usedAttributes JSON query: parsed into usedAttributes when the report is a JSON object, otherwise as text in raw. Helps to find the attributes DeleteAttributes can remove before a handover. Available from Archicad 27."
@@ -950,6 +951,7 @@ GSErrCode Initialize (void)
         err |= RegisterCommand<ActivateLayerCombinationCommand> (
             attributeCommands, "1.7.2",
             "Activates the given layer combination in the current window, like choosing it in the Quick Layers palette. Saved views are not changed."
+        );
         err |= RegisterCommand<GetCurrentLayerCombinationCommand> (
             attributeCommands, "1.7.2",
             "Returns the layer combination in effect in the current window. No layer combination is returned when the current state of the layers matches none."
@@ -1045,6 +1047,7 @@ GSErrCode Initialize (void)
         err |= RegisterCommand<SetGraphicOverrideRuleOrderCommand> (
             attributeCommands, "1.7.2",
             "Sets the order of the rules in graphic override rule groups, found by name. The listed rules come first, in the given order; the other rules of the group keep their order after them. Available from Archicad 27."
+        );
         err |= RegisterCommand<RenameGraphicOverrideRuleGroupsCommand> (
             attributeCommands, "1.7.3",
             "Renames graphic override rule groups, found by name. Their rules are kept. Available from Archicad 27."

@@ -1,0 +1,18 @@
+diff --git a/archicad-addon/Sources/AttributeCommands.cpp b/archicad-addon/Sources/AttributeCommands.cpp
+index 633a27a0..8155dab5 100644
+--- a/archicad-addon/Sources/AttributeCommands.cpp
++++ b/archicad-addon/Sources/AttributeCommands.cpp
+@@ -161,8 +161,13 @@ static GS::HashTable<API_Guid, GS::Array<GS::UniString>> GetAttributeFolderPaths
+     rootFolder.typeID = typeID;
+     // API_AttributeFolder::guid is a GS::Guid (unlike API_Attr_Head::guid), so the root folder is selected by GS::NULLGuid.
+     rootFolder.guid = GS::NULLGuid;
+     if (ACAPI_Attribute_GetFolder (rootFolder) == NoError) {
++        // Archicad returns the root folder with its own localized name as path (e.g. "Layers"), and every
++        // subfolder path starts with it. Paths are reported relative to the root, the same form the folder
++        // commands take as input, so the root starts from an empty path and the subfolder paths are rebuilt
++        // from it below (their API path is one level deeper than expected).
++        rootFolder.path.Clear ();
+         CollectAttributeFolderPaths (rootFolder, folderPathsByAttribute);
+     }
+     return folderPathsByAttribute;
+ }
