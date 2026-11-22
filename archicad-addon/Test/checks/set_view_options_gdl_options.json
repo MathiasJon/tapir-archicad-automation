@@ -1,0 +1,86 @@
+{
+  "title": "GetViewOptions reads the library part options of the window (gdlOptions); SetViewOptions switches to a combination by name, changes a GDL parameter of the library part options on top of it (the window then uses Custom options) and reads it back, refuses an unknown GDL parameter and more than one way of giving the combination, and answers with the combination the window applies; the teardown switches back to the original combination",
+  "minTapir": "2.0.1",
+  "steps": [
+    {
+      "id": "the window's options and combination before",
+      "command": "GetViewOptions",
+      "creates": false,
+      "params": {},
+      "save": {
+        "originalName": "modelViewOptionName"
+      },
+      "expect": [
+        { "path": "viewOptions.gdlOptions[0].name", "exists": true, "name": "the library part options of the window are read" },
+        { "path": "viewOptions.gdlOptions[0].parameters", "exists": true, "name": "with their GDL parameters" }
+      ]
+    },
+    {
+      "id": "a stored combination to switch to",
+      "command": "GetModelViewOptionDetails",
+      "creates": false,
+      "params": {},
+      "save": {
+        "combination": "modelViewOptionDetails[0].name"
+      },
+      "expect": [
+        { "path": "modelViewOptionDetails[0].name", "exists": true, "name": "the project has a combination" }
+      ]
+    },
+    {
+      "id": "switched by name",
+      "command": "SetViewOptions",
+      "creates": false,
+      "params": { "modelViewOptionName": "${combination}" },
+      "expect": [
+        { "path": "modelViewOptionName", "eq": "${combination}", "name": "the window applies the combination named, looked up by name" }
+      ]
+    },
+    {
+      "id": "a GDL parameter of the library globals changed on top of the combination",
+      "command": "SetViewOptions",
+      "creates": false,
+      "params": {
+        "modelViewOptionName": "${combination}",
+        "viewOptions": {
+          "gdlOptions": [
+            { "name": "LibraryGlobals13", "parameters": [ { "name": "AC_Ceiling_Plan", "value": true } ] }
+          ]
+        }
+      },
+      "expect": [
+        { "path": "modelViewOptionIndex", "eq": 0, "name": "the change is applied and read back, and the window then uses Custom options" }
+      ]
+    },
+    {
+      "id": "an unknown GDL parameter",
+      "command": "SetViewOptions",
+      "creates": false,
+      "params": {
+        "viewOptions": {
+          "gdlOptions": [
+            { "name": "LibraryGlobals13", "parameters": [ { "name": "TapirNoSuchParameter", "value": 1 } ] }
+          ]
+        }
+      },
+      "expect": [
+        { "path": "error.message", "contains": "unknown parameter 'TapirNoSuchParameter'", "name": "refused with the parameter named" }
+      ]
+    },
+    {
+      "id": "the combination given twice",
+      "command": "SetViewOptions",
+      "creates": false,
+      "params": { "modelViewOptionIndex": 1, "modelViewOptionName": "${combination}" },
+      "expect": [
+        { "path": "error.message", "contains": "Give only one of", "name": "refused" }
+      ]
+    }
+  ],
+  "teardown": [
+    {
+      "command": "SetViewOptions",
+      "params": { "modelViewOptionName": "${originalName}" }
+    }
+  ]
+}

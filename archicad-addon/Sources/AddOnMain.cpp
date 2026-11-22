@@ -2778,12 +2778,14 @@ GSErrCode Initialize (void)
         );
         err |= RegisterCommand<GetViewOptionsCommand> (
             navigatorCommands, "1.8.0",
-            "Gets the model view options and on-screen view options of the current plan window, and the index and name of the model view option combination it applies."
+            "Gets the model view options and on-screen view options of the current plan window, with the options library parts add to them (gdlOptions) and their GDL parameter values, and the index and name of the model view option combination it applies."
         );
         err |= RegisterCommand<SetViewOptionsCommand> (
             navigatorCommands, "1.8.0",
-            "Switches the current plan window to a model view option combination by index, and/or changes the given model view options and on-screen view options. With an index, the model view options stored in the combination apply. "
-            "The options are read back, and a given field Archicad did not keep (with an index, a given on-screen view option) fails the call with the value it kept; the fields Archicad kept stay changed. "
+            "Switches the current plan window to a model view option combination, given by name, id or index, and/or changes the given model view options, GDL parameters of the library part options (gdlOptions) and on-screen view options. "
+            "With a combination and model view options or gdlOptions, the combination is applied first and the given options on top of it, so the window then uses Custom options based on the combination. "
+            "The change applies to the window only: the Archicad API (from Archicad 27) has no function to write a stored combination, so save the window's options into a combination in the Model View Options dialog. "
+            "The options are read back, and a given field Archicad did not keep fails the call with the value it kept; the fields Archicad kept stay changed. The response gives the combination the window applies afterwards. "
             "Archicad 29 does not keep the railing components shown in the floor plan (modelViewOptions.railing, railing2DDisplayComp*) changed this way, so such a change is reported as not kept; GetViewOptions reads them."
         );
         err |= RegisterCommand<GetViewSettingsCommand> (

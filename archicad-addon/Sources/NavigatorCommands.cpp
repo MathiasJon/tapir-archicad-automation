@@ -1,5 +1,6 @@
 #include "NavigatorCommands.hpp"
 #include "ElementGDLParameterCommands.hpp"
+#include "LibraryPartParameters.hpp"
 #include "MigrationHelper.hpp"
 #include "Base64Converter.hpp"
 #include "Transformation2D.hpp"
@@ -1180,6 +1181,131 @@ void DisposeViewOptions (API_ViewOptions& viewOptions)
     }
 }
 
+// The number of library part option sets in a gdlOptions array (a GSPtr, sized as the DevKit's
+// Environment_Control example sizes it).
+GSSize GetGDLModelViewOptionCount (const API_GDLModelViewOptions* gdlOptions)
+{
+    return gdlOptions != nullptr ? BMGetPtrSize (reinterpret_cast<GSConstPtr> (gdlOptions)) / sizeof (API_GDLModelViewOptions) : 0;
+}
+
+// Adds the library part option sets of the model view options as "gdlOptions", in the shape of
+// GDLModelViewOptionSet. The array stays owned by the caller.
+void AddGDLModelViewOptions (GS::ObjectState& os, const API_ModelViewOptions& modelViewOptions)
+{
+    const auto& gdlOptionsAdder = os.AddList<GS::ObjectState> ("gdlOptions");
+    const API_GDLModelViewOptions* gdlOptions = modelViewOptions.gdlOptions;
+    const GSSize nGdlOptions = GetGDLModelViewOptionCount (gdlOptions);
+    for (GSSize i = 0; i < nGdlOptions; ++i) {
+        const API_GDLModelViewOptions& gdlOption = gdlOptions[i];
+        GS::ObjectState gdlOptionOS;
+        gdlOptionOS.Add ("name", GS::UniString (gdlOption.name));
+        gdlOptionOS.Add ("guid", CreateGuidObjectState (gdlOption.guid));
+        if (gdlOption.supersetGuid != APINULLGuid) {
+            gdlOptionOS.Add ("supersetGuid", CreateGuidObjectState (gdlOption.supersetGuid));
+        }
+        // Without a library part index only "parameters" is added, as for the parameters of a Favorite.
+        AddLibPartAndGDLParameters (gdlOptionOS, 0, gdlOption.params);
+        gdlOptionsAdder (gdlOptionOS);
+    }
+}
+
+// The option set of a GDLModelViewOptionSetUpdate: by guid when it is given, else by name.
+API_GDLModelViewOptions* FindGDLModelViewOption (API_ModelViewOptions& modelViewOptions, const GS::ObjectState& update, GS::UniString& label)
+{
+    API_Guid guid = APINULLGuid;
+    const GS::ObjectState* guidOS = update.Get ("guid");
+    if (guidOS != nullptr) {
+        guid = GetGuidFromObjectState (*guidOS);
+    }
+    GS::UniString name;
+    update.Get ("name", name);
+    label = (guid != APINULLGuid) ? APIGuidToString (guid) : name;
+
+    API_GDLModelViewOptions* gdlOptions = modelViewOptions.gdlOptions;
+    const GSSize nGdlOptions = GetGDLModelViewOptionCount (gdlOptions);
+    for (GSSize i = 0; i < nGdlOptions; ++i) {
+        const bool matches = (guid != APINULLGuid)
+            ? gdlOptions[i].guid == guid
+            : GS::UniString (gdlOptions[i].name).Compare (name, CaseInsensitive) == GS::UniString::Equal;
+        if (matches) {
+            return &gdlOptions[i];
+        }
+    }
+    return nullptr;
+}
+
+// Applies the parameter values of the GDLModelViewOptionSetUpdate items to the model view options.
+// What cannot be applied (an unknown option set or parameter, a wrong value type) goes to errors.
+void ApplyGDLModelViewOptions (API_ModelViewOptions& modelViewOptions, const GS::Array<GS::ObjectState>& updates, GS::Array<GS::UniString>& errors)
+{
+    for (const GS::ObjectState& update : updates) {
+        GS::UniString label;
+        API_GDLModelViewOptions* gdlOption = FindGDLModelViewOption (modelViewOptions, update, label);
+        if (gdlOption == nullptr) {
+            errors.Push ("no library part option set '" + label + "' in the model view options");
+            continue;
+        }
+        GS::Array<GS::ObjectState> params;
+        update.Get ("parameters", params);
+        for (const GS::ObjectState& param : params) {
+            GS::Array<GS::UniString> warnings;
+            ApplyParameter (gdlOption->params, param, warnings);
+            for (const GS::UniString& warning : warnings) {
+                errors.Push (GS::UniString (gdlOption->name) + ": " + warning);
+            }
+        }
+    }
+}
+
+// Compares the given GDL parameter values with the ones Archicad kept, and lists the ones it did not.
+void CheckGDLModelViewOptions (API_ModelViewOptions& modelViewOptions, const GS::Array<GS::ObjectState>& updates, GS::UniString& notKept)
+{
+    for (const GS::ObjectState& update : updates) {
+        GS::UniString label;
+        API_GDLModelViewOptions* gdlOption = FindGDLModelViewOption (modelViewOptions, update, label);
+        if (gdlOption == nullptr || gdlOption->params == nullptr) {
+            continue;
+        }
+        GS::Array<GS::ObjectState> params;
+        update.Get ("parameters", params);
+        for (const GS::ObjectState& param : params) {
+            GS::UniString name;
+            param.Get ("name", name);
+            const API_AddParType* kept = nullptr;
+            const GSSize nParams = BMGetHandleSize ((GSHandle) gdlOption->params) / sizeof (API_AddParType);
+            for (GSIndex ii = 0; ii < nParams && kept == nullptr; ++ii) {
+                const API_AddParType& candidate = (*gdlOption->params)[ii];
+                if (candidate.typeMod != API_ParArray && CHEqualCStringsInsensitive (candidate.name, name.ToCStr ().Get ())) {
+                    kept = &candidate;
+                }
+            }
+            if (kept == nullptr) {
+                continue;
+            }
+            if (IsNumericParam (kept->typeID)) {
+                double d = 0.0;
+                bool b = false;
+                double wanted = 0.0;
+                if (param.Get ("value", d)) {
+                    wanted = d;
+                } else if (param.Get ("value", b)) {
+                    wanted = b ? 1.0 : 0.0;
+                } else {
+                    continue;
+                }
+                if (std::fabs (kept->value.real - wanted) > 1e-9) {
+                    notKept += " " + GS::UniString (gdlOption->name) + "." + name + " = " + GS::ValueToUniString (kept->value.real);
+                }
+            } else if (kept->typeID == APIParT_CString || kept->typeID == APIParT_Title) {
+                GS::UniString wanted;
+                if (param.Get ("value", wanted) && GS::UniString (kept->value.uStr) != wanted) {
+                    notKept += " " + GS::UniString (gdlOption->name) + "." + name + " = '" + GS::UniString (kept->value.uStr) + "'";
+                }
+            }
+        }
+    }
+}
+
 }
 
 GetModelViewOptionDetailsCommand::GetModelViewOptionDetailsCommand () :
@@ -1278,52 +1404,7 @@ GS::Optional<GS::UniString> GetModelViewOptionDetailsCommand::GetRawResponseSche
                                 "type": "array",
                                 "description": "The model view options that library parts add to the combination (the library part settings of the Model View Options dialog, e.g. of doors, windows and objects), with their GDL parameter values.",
                                 "items": {
-                                    "type": "object",
-                                    "properties": {
-                                        "name": {
-                                            "type": "string",
-                                            "description": "The name of the option set, e.g. the name of the library global settings part."
-                                        },
-                                        "guid": {
-                                            "type": "object",
-                                            "description": "The unique id of the option set.",
-                                            "properties": {
-                                                "guid": {
-                                                    "$ref": "#/Guid"
-                                                }
-                                            },
-                                            "additionalProperties": false,
-                                            "required": [
-                                                "guid"
-                                            ]
-                                        },
-                                        "supersetGuid": {
-                                            "type": "object",
-                                            "description": "The id of another option set that has all of the functionality of this one. When it is given, this set is filled but not shown in the Model View Options dialog.",
-                                            "properties": {
-                                                "guid": {
-                                                    "$ref": "#/Guid"
-                                                }
-                                            },
-                                            "additionalProperties": false,
-                                            "required": [
-                                                "guid"
-                                            ]
-                                        },
-                                        "parameters": {
-                                            "type": "array",
-                                            "description": "The GDL parameters of the option set with their values in this combination.",
-                                            "items": {
-                                                "$ref": "#/StoredGDLParameter"
-                                            }
-                                        }
-                                    },
-                                    "additionalProperties": false,
-                                    "required": [
-                                        "name",
-                                        "guid",
-                                        "parameters"
-                                    ]
+                                    "$ref": "#/GDLModelViewOptionSet"
                                 }
                             }
                         },
@@ -1375,21 +1456,7 @@ GS::ObjectState CreateModelViewOptionDetails (API_ModelViewOptionsType& modelVie
     VisitModelViewOptions (writer, modelViewOption.modelViewOpt);
     details.Add ("modelViewOptions", modelViewOptionsOS);
 
-    const auto& gdlOptionsAdder = details.AddList<GS::ObjectState> ("gdlOptions");
-    const API_GDLModelViewOptions* gdlOptions = modelViewOption.modelViewOpt.gdlOptions;
-    const GSSize nGdlOptions = gdlOptions != nullptr ? BMGetPtrSize (reinterpret_cast<GSConstPtr> (gdlOptions)) / sizeof (API_GDLModelViewOptions) : 0;
-    for (GSSize i = 0; i < nGdlOptions; ++i) {
-        const API_GDLModelViewOptions& gdlOption = gdlOptions[i];
-        GS::ObjectState gdlOptionOS;
-        gdlOptionOS.Add ("name", GS::UniString (gdlOption.name));
-        gdlOptionOS.Add ("guid", CreateGuidObjectState (gdlOption.guid));
-        if (gdlOption.supersetGuid != APINULLGuid) {
-            gdlOptionOS.Add ("supersetGuid", CreateGuidObjectState (gdlOption.supersetGuid));
-        }
-        // Without a library part index only "parameters" is added, as for the parameters of a Favorite.
-        AddLibPartAndGDLParameters (gdlOptionOS, 0, gdlOption.params);
-        gdlOptionsAdder (gdlOptionOS);
-    }
+    AddGDLModelViewOptions (details, modelViewOption.modelViewOpt);
     return details;
 }
 
@@ -1611,6 +1678,7 @@ GS::ObjectState GetViewOptionsCommand::Execute (const GS::ObjectState& /*paramet
     GS::ObjectState viewOptionsOS;
     ViewOptionsWriter writer { &viewOptionsOS };
     VisitViewOptions (writer, viewOptions);
+    AddGDLModelViewOptions (viewOptionsOS, viewOptions.modelViewOpt);
     DisposeViewOptions (viewOptions);
 
     GS::ObjectState response;
@@ -1636,8 +1704,16 @@ GS::Optional<GS::UniString> SetViewOptionsCommand::GetInputParametersSchema () c
     "properties": {
         "modelViewOptionIndex": {
             "type": "integer",
-            "description": "Switches the window to the model view option combination with this index, as GetViewOptions, FindModelViewOption and GetModelViewOptionDetails return it. Archicad then applies the model view options stored in the combination: viewOptions.modelViewOptions are not applied together with an index, viewOptions.onScreenViewOptions are. Archicad may renumber the combinations when the view options of a window change, so look the index up by name with FindModelViewOption right before switching.",
+            "description": "Switches the window to the model view option combination with this index, as GetViewOptions, FindModelViewOption and GetModelViewOptionDetails return it. Archicad may renumber the combinations when the view options of a window change, so prefer modelViewOptionName or modelViewOptionId, which are looked up right before switching. Give only one of the three.",
             "minimum": 1
+        },
+        "modelViewOptionName": {
+            "type": "string",
+            "description": "Switches the window to the model view option combination with this name (case-insensitive), looked up right before switching. Give only one of modelViewOptionIndex, modelViewOptionName and modelViewOptionId."
+        },
+        "modelViewOptionId": {
+            "$ref": "#/ModelViewOptionId",
+            "description": "Switches the window to the model view option combination with this id, looked up right before switching. Give only one of modelViewOptionIndex, modelViewOptionName and modelViewOptionId."
         },
         "viewOptions": {
             "$ref": "#/ViewOptionsUpdate"
@@ -1647,22 +1723,118 @@ GS::Optional<GS::UniString> SetViewOptionsCommand::GetInputParametersSchema () c
 })";
 }
 
+GS::Optional<GS::UniString> SetViewOptionsCommand::GetRawResponseSchema () const
+{
+    return R"({
+    "type": "object",
+    "properties": {
+        "modelViewOptionIndex": {
+            "type": "integer",
+            "description": "The index of the model view option combination the window applies after the change, 0 when its options are not a stored combination (Custom), as GetViewOptions returns it."
+        },
+        "modelViewOptionName": {
+            "type": "string",
+            "description": "The name of that combination, empty when there is none."
+        }
+    },
+    "additionalProperties": false,
+    "required": [
+        "modelViewOptionIndex",
+        "modelViewOptionName"
+    ]
+})";
+}
+
+namespace {
+
+// The index of the stored model view option combination with this guid, else with this name
+// (case-insensitive); 0 when there is none. Read the way GetModelViewOptionDetails reads them,
+// right before it is used, because Archicad renumbers the combinations.
+short FindModelViewOptionIndex (const API_Guid& guid, const GS::UniString& name)
+{
+#ifdef ServerMainVers_2700
+    UInt32 count = 0;
+    ACAPI_Navigator_ModelViewOptions_GetNum (count);
+    for (UInt32 i = 1; i <= count; ++i) {
+        GS::UniString storedName;
+        API_ModelViewOptionsType modelViewOption = {};
+        modelViewOption.head.index = i;
+        modelViewOption.head.uniStringNamePtr = &storedName;
+        if (ACAPI_Navigator_ModelViewOptions_Get (&modelViewOption) != NoError) {
+            continue;
+        }
+        ACAPI_FreeGDLModelViewOptionsPtr (&modelViewOption.modelViewOpt.gdlOptions);
+        const bool matches = (guid != APINULLGuid)
+            ? modelViewOption.head.guid == guid
+            : storedName.Compare (name, CaseInsensitive) == GS::UniString::Equal;
+        if (matches) {
+            return static_cast<short> (i);
+        }
+    }
+#else
+    (void) guid;
+    (void) name;
+#endif
+    return 0;
+}
+
+GS::ObjectState CreateViewOptionsStateResponse ()
+{
+    API_ViewOptions viewOptions = {};
+    short index = 0;
+    ACAPI_Navigator_GetViewOptions (&viewOptions, &index);
+    DisposeViewOptions (viewOptions);
+
+    GS::ObjectState response;
+    response.Add ("modelViewOptionIndex", (Int32) index);
+    response.Add ("modelViewOptionName", GetModelViewOptionName (index));
+    return response;
+}
+
+}
+
 GS::ObjectState SetViewOptionsCommand::Execute (const GS::ObjectState& parameters, GS::ProcessControl& /*processControl*/) const
 {
     Int32 requestedIndex = 0;
-    const bool switchCombination = parameters.Get ("modelViewOptionIndex", requestedIndex);
+    const bool byIndex = parameters.Get ("modelViewOptionIndex", requestedIndex);
+    GS::UniString requestedName;
+    const bool byName = parameters.Get ("modelViewOptionName", requestedName);
+    const GS::ObjectState* requestedIdOS = parameters.Get ("modelViewOptionId");
+    const bool byId = requestedIdOS != nullptr;
     const GS::ObjectState* viewOptionsOS = parameters.Get ("viewOptions");
 
+    if ((byIndex ? 1 : 0) + (byName ? 1 : 0) + (byId ? 1 : 0) > 1) {
+        return CreateErrorResponse (APIERR_BADPARS, "Give only one of modelViewOptionIndex, modelViewOptionName and modelViewOptionId.");
+    }
+    const bool switchCombination = byIndex || byName || byId;
     if (!switchCombination && viewOptionsOS == nullptr) {
-        return CreateErrorResponse (APIERR_BADPARS, "Give modelViewOptionIndex, viewOptions or both.");
+        return CreateErrorResponse (APIERR_BADPARS, "Give a model view option combination (modelViewOptionIndex, modelViewOptionName or modelViewOptionId), viewOptions or both.");
     }
 
     short modelViewOptionIndex = (short) requestedIndex;
+    if (byName || byId) {
+        const API_Guid guid = byId ? GetGuidFromObjectState (*requestedIdOS) : APINULLGuid;
+        if (byId && guid == APINULLGuid) {
+            return CreateErrorResponse (APIERR_BADPARS, "modelViewOptionId is corrupt or missing.");
+        }
+        modelViewOptionIndex = FindModelViewOptionIndex (guid, requestedName);
+        if (modelViewOptionIndex == 0) {
+            return byId
+                ? CreateErrorResponse (APIERR_BADID, "No model view option combination has the given modelViewOptionId.")
+                : CreateErrorResponse (APIERR_BADNAME, "No model view option combination is named '" + requestedName + "'.");
+        }
+    }
+
+    const GS::ObjectState* modelViewOptionsOS = viewOptionsOS != nullptr ? viewOptionsOS->Get ("modelViewOptions") : nullptr;
+    const GS::ObjectState* onScreenOS = viewOptionsOS != nullptr ? viewOptionsOS->Get ("onScreenViewOptions") : nullptr;
+    GS::Array<GS::ObjectState> gdlUpdates;
+    const bool changesGdlOptions = viewOptionsOS != nullptr && viewOptionsOS->Get ("gdlOptions", gdlUpdates);
+    const bool changesModelViewOptions = modelViewOptionsOS != nullptr || changesGdlOptions;
 
     // ACAPI_Navigator_ChangeViewOptions needs the options also when only the combination is
     // switched: up to Archicad 29 a null pointer fails with APIERR_BADPARS. So the current
-    // options are passed, with the given fields changed. With an index, Archicad applies the
-    // model view options stored in the combination and takes the on-screen options passed.
+    // options are passed. With an index, Archicad applies the model view options stored in the
+    // combination and takes the on-screen options passed.
     API_ViewOptions viewOptions = {};
     short currentIndex = 0;
     GSErrCode err = ACAPI_Navigator_GetViewOptions (&viewOptions, &currentIndex);
@@ -1671,21 +1843,78 @@ GS::ObjectState SetViewOptionsCommand::Execute (const GS::ObjectState& parameter
         return CreateErrorResponse (err, "Failed to get the view options. Is a plan window open?");
     }
 
+    if (switchCombination) {
+        if (onScreenOS != nullptr) {
+            GS::ObjectState onScreenOnly;
+            onScreenOnly.Add ("onScreenViewOptions", *onScreenOS);
+            ViewOptionsReader reader { &onScreenOnly };
+            VisitViewOptions (reader, viewOptions);
+        }
+        err = ACAPI_Navigator_ChangeViewOptions (&viewOptions, &modelViewOptionIndex);
+        DisposeViewOptions (viewOptions);
+        if (err != NoError) {
+            return CreateErrorResponse (err, "Failed to switch to the model view option combination. Check that it exists and that a plan window is open.");
+        }
+        if (!changesModelViewOptions) {
+            GS::ObjectState onScreenOnly;
+            if (onScreenOS != nullptr) {
+                onScreenOnly.Add ("onScreenViewOptions", *onScreenOS);
+            }
+            API_ViewOptions changed = {};
+            short changedIndex = 0;
+            err = ACAPI_Navigator_GetViewOptions (&changed, &changedIndex);
+            if (err != NoError) {
+                DisposeViewOptions (changed);
+                return CreateErrorResponse (err, "Failed to read the view options back after the change.");
+            }
+            ViewOptionsChecker checker { &onScreenOnly, GS::UniString (), GS::UniString () };
+            VisitViewOptions (checker, changed);
+            DisposeViewOptions (changed);
+            if (!checker.notKept.IsEmpty ()) {
+                return CreateErrorResponse (APIERR_GENERAL, "Archicad did not keep every given view option:" + checker.notKept);
+            }
+            return CreateViewOptionsStateResponse ();
+        }
+
+        // The model view options given are applied on top of the combination just switched to,
+        // so the window then uses Custom options based on it.
+        viewOptions = {};
+        err = ACAPI_Navigator_GetViewOptions (&viewOptions, &currentIndex);
+        if (err != NoError) {
+            DisposeViewOptions (viewOptions);
+            return CreateErrorResponse (err, "Failed to read the view options of the combination.");
+        }
+    }
+
     if (viewOptionsOS != nullptr) {
         ViewOptionsReader reader { viewOptionsOS };
         VisitViewOptions (reader, viewOptions);
+
+        if (changesGdlOptions) {
+            GS::Array<GS::UniString> errors;
+            ApplyGDLModelViewOptions (viewOptions.modelViewOpt, gdlUpdates, errors);
+            if (!errors.IsEmpty ()) {
+                DisposeViewOptions (viewOptions);
+                GS::UniString message = switchCombination
+                    ? "The window was switched to the combination, but the library part options cannot be applied:"
+                    : "Nothing was changed. The library part options cannot be applied:";
+                for (const GS::UniString& error : errors) {
+                    message += " " + error + ";";
+                }
+                return CreateErrorResponse (APIERR_BADPARS, message);
+            }
+        }
     }
 
-    err = ACAPI_Navigator_ChangeViewOptions (&viewOptions, switchCombination ? &modelViewOptionIndex : nullptr);
+    err = ACAPI_Navigator_ChangeViewOptions (&viewOptions, nullptr);
     DisposeViewOptions (viewOptions);
 
     if (err != NoError) {
-        return CreateErrorResponse (err, "Failed to change the view options. Check the model view option index and that a plan window is open.");
+        return CreateErrorResponse (err, "Failed to change the view options. Check that a plan window is open.");
     }
 
     // The options are read back, so a given field Archicad did not keep is reported instead of a
-    // success. With an index the combination's model view options apply, not the given ones, so
-    // only the on-screen view options are compared then.
+    // success.
     if (viewOptionsOS != nullptr) {
         API_ViewOptions changed = {};
         short changedIndex = 0;
@@ -1694,20 +1923,16 @@ GS::ObjectState SetViewOptionsCommand::Execute (const GS::ObjectState& parameter
             DisposeViewOptions (changed);
             return CreateErrorResponse (err, "Failed to read the view options back after the change.");
         }
-        GS::ObjectState onScreenOnly;
-        const GS::ObjectState* onScreenOS = viewOptionsOS->Get ("onScreenViewOptions");
-        if (onScreenOS != nullptr) {
-            onScreenOnly.Add ("onScreenViewOptions", *onScreenOS);
-        }
-        ViewOptionsChecker checker { switchCombination ? &onScreenOnly : viewOptionsOS, GS::UniString (), GS::UniString () };
+        ViewOptionsChecker checker { viewOptionsOS, GS::UniString (), GS::UniString () };
         VisitViewOptions (checker, changed);
+        CheckGDLModelViewOptions (changed.modelViewOpt, gdlUpdates, checker.notKept);
         DisposeViewOptions (changed);
         if (!checker.notKept.IsEmpty ()) {
             return CreateErrorResponse (APIERR_GENERAL, "Archicad did not keep every given view option:" + checker.notKept);
         }
     }
 
-    return {};
+    return CreateViewOptionsStateResponse ();
 }
 
 GetViewSettingsCommand::GetViewSettingsCommand () :

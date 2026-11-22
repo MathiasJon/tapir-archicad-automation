@@ -101,9 +101,9 @@
     'Add an item to a publisher set': 'パブリッシャーセット（publisher set）に項目を追加する',
     'Add the items in Archicad\'s Organizer, then publish the set with <a href="../archicad-addon/#PublishPublisherSet">PublishPublisherSet</a>.':
         'Archicad の Organizer で項目を追加し、<a href="../archicad-addon/#PublishPublisherSet">PublishPublisherSet</a> でそのセットをパブリッシュします。',
-    'Change, rename or create a stored Model View Options combination': '保存済みの Model View Options の組み合わせを変更、名前変更、または作成する',
-    'Read the combinations with <a href="../archicad-addon/#GetModelViewOptionDetails">GetModelViewOptionDetails</a>; change the options of the current window with <a href="../archicad-addon/#SetViewOptions">SetViewOptions</a>.':
-        '組み合わせは <a href="../archicad-addon/#GetModelViewOptionDetails">GetModelViewOptionDetails</a> で読み取れます。現在のウィンドウのオプションは <a href="../archicad-addon/#SetViewOptions">SetViewOptions</a> で変更できます。',
+    'Change, rename, create or delete a stored Model View Options combination': '保存済みの Model View Options の組み合わせを変更、名前変更、作成、または削除する',
+    'Read the combinations with <a href="../archicad-addon/#GetModelViewOptionDetails">GetModelViewOptionDetails</a>. Switch the current window to a combination by name and change its model view options and the GDL parameters of its library part options (gdlOptions) with <a href="../archicad-addon/#SetViewOptions">SetViewOptions</a>, then save the window\'s options into the combination in the Model View Options dialog.':
+        '組み合わせは <a href="../archicad-addon/#GetModelViewOptionDetails">GetModelViewOptionDetails</a> で読み取れます。<a href="../archicad-addon/#SetViewOptions">SetViewOptions</a> で現在のウィンドウを名前で組み合わせに切り替え、モデル表示オプションとライブラリパーツのオプション (gdlOptions) の GDL パラメータを変更してから、Model View Options ダイアログでウィンドウのオプションを組み合わせに保存します。',
     'Make a 3D style the current one': '3D スタイルを現在のスタイルにする',
     'Give a view the 3D style with <a href="../archicad-addon/#SetViewSettings">SetViewSettings</a> (<code>d3styleName</code>) and open that view with <a href="../archicad-addon/#ChangeWindow">ChangeWindow</a> (<code>navigatorItemId</code>, from Archicad 27).':
         '<a href="../archicad-addon/#SetViewSettings">SetViewSettings</a>（<code>d3styleName</code>）でビューにその 3D スタイルを設定し、<a href="../archicad-addon/#ChangeWindow">ChangeWindow</a>（<code>navigatorItemId</code>、Archicad 27 以降）でそのビューを開いてください。',

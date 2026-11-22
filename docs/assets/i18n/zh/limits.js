@@ -99,9 +99,9 @@
     'Add an item to a publisher set': '向发布集（publisher set）添加项目',
     'Add the items in Archicad\'s Organizer, then publish the set with <a href="../archicad-addon/#PublishPublisherSet">PublishPublisherSet</a>.':
         '在 Archicad 的 Organizer 中添加项目，然后用 <a href="../archicad-addon/#PublishPublisherSet">PublishPublisherSet</a> 发布该集。',
-    'Change, rename or create a stored Model View Options combination': '修改、重命名或新建已保存的 Model View Options 组合',
-    'Read the combinations with <a href="../archicad-addon/#GetModelViewOptionDetails">GetModelViewOptionDetails</a>; change the options of the current window with <a href="../archicad-addon/#SetViewOptions">SetViewOptions</a>.':
-        '用 <a href="../archicad-addon/#GetModelViewOptionDetails">GetModelViewOptionDetails</a> 读取这些组合；用 <a href="../archicad-addon/#SetViewOptions">SetViewOptions</a> 修改当前窗口的选项。',
+    'Change, rename, create or delete a stored Model View Options combination': '修改、重命名、新建或删除已保存的 Model View Options 组合',
+    'Read the combinations with <a href="../archicad-addon/#GetModelViewOptionDetails">GetModelViewOptionDetails</a>. Switch the current window to a combination by name and change its model view options and the GDL parameters of its library part options (gdlOptions) with <a href="../archicad-addon/#SetViewOptions">SetViewOptions</a>, then save the window\'s options into the combination in the Model View Options dialog.':
+        '用 <a href="../archicad-addon/#GetModelViewOptionDetails">GetModelViewOptionDetails</a> 读取这些组合。用 <a href="../archicad-addon/#SetViewOptions">SetViewOptions</a> 按名称把当前窗口切换到某个组合，并修改其模型视图选项和库部件选项 (gdlOptions) 的 GDL 参数，然后在 Model View Options 对话框中把窗口的选项保存到该组合。',
     'Make a 3D style the current one': '将某个 3D 样式设为当前样式',
     'Give a view the 3D style with <a href="../archicad-addon/#SetViewSettings">SetViewSettings</a> (<code>d3styleName</code>) and open that view with <a href="../archicad-addon/#ChangeWindow">ChangeWindow</a> (<code>navigatorItemId</code>, from Archicad 27).':
         '用 <a href="../archicad-addon/#SetViewSettings">SetViewSettings</a>（<code>d3styleName</code>）为某个视图指定该 3D 样式，再用 <a href="../archicad-addon/#ChangeWindow">ChangeWindow</a>（<code>navigatorItemId</code>，Archicad 27 起）打开该视图。',

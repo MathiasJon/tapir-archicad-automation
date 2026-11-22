@@ -1282,6 +1282,13 @@
                 "type": "object",
                 "description": "Fields of API_OnScreenViewOptions.",
                 "additionalProperties": true
+            },
+            "gdlOptions": {
+                "type": "array",
+                "description": "The model view options that library parts add (the library part settings of the Model View Options dialog), with their GDL parameter values in the window.",
+                "items": {
+                    "$ref": "#/GDLModelViewOptionSet"
+                }
             }
         },
         "additionalProperties": false,
@@ -1290,9 +1297,106 @@
             "onScreenViewOptions"
         ]
     },
+    "GDLModelViewOptionSet": {
+        "type": "object",
+        "description": "A set of model view options that a library part adds (the library part settings of the Model View Options dialog, e.g. of doors, windows and objects), with its GDL parameter values.",
+        "properties": {
+            "name": {
+                "type": "string",
+                "description": "The name of the option set, e.g. the name of the library global settings part."
+            },
+            "guid": {
+                "type": "object",
+                "description": "The unique id of the option set.",
+                "properties": {
+                    "guid": {
+                        "$ref": "#/Guid"
+                    }
+                },
+                "additionalProperties": false,
+                "required": [
+                    "guid"
+                ]
+            },
+            "supersetGuid": {
+                "type": "object",
+                "description": "The id of another option set that has all of the functionality of this one. When it is given, this set is filled but not shown in the Model View Options dialog.",
+                "properties": {
+                    "guid": {
+                        "$ref": "#/Guid"
+                    }
+                },
+                "additionalProperties": false,
+                "required": [
+                    "guid"
+                ]
+            },
+            "parameters": {
+                "type": "array",
+                "description": "The GDL parameters of the option set with their values.",
+                "items": {
+                    "$ref": "#/StoredGDLParameter"
+                }
+            }
+        },
+        "additionalProperties": false,
+        "required": [
+            "name",
+            "guid",
+            "parameters"
+        ]
+    },
+    "GDLModelViewOptionSetUpdate": {
+        "type": "object",
+        "description": "The GDL parameters to change in one library part option set of the model view options, found by guid, else by name, as GetViewOptions returns them.",
+        "properties": {
+            "guid": {
+                "type": "object",
+                "description": "The unique id of the option set.",
+                "properties": {
+                    "guid": {
+                        "$ref": "#/Guid"
+                    }
+                },
+                "additionalProperties": false,
+                "required": [
+                    "guid"
+                ]
+            },
+            "name": {
+                "type": "string",
+                "description": "The name of the option set, used when guid is not given."
+            },
+            "parameters": {
+                "type": "array",
+                "description": "The parameters to change, by name; the ones left out keep their value. Array parameters cannot be changed.",
+                "items": {
+                    "type": "object",
+                    "properties": {
+                        "name": {
+                            "type": "string",
+                            "description": "The name of the parameter."
+                        },
+                        "value": {
+                            "description": "The new value: a number or a boolean for a numeric parameter, a string for a string parameter."
+                        }
+                    },
+                    "additionalProperties": false,
+                    "required": [
+                        "name",
+                        "value"
+                    ]
+                }
+            }
+        },
+        "additionalProperties": false,
+        "required": [
+            "parameters"
+        ]
+    },
     "ViewOptionsUpdate": {
         "type": "object",
-        "description": "The fields to change, named as in the response of GetViewOptions. Fields not given keep their current value. Without an index, the window then uses Custom model view options (index 0), also when only on-screen view options are given. To keep the combination, give its index as well. The options are read back, and a given field Archicad did not keep fails the call with the value it kept.",
+        "description": "The fields to change, named as in the response of GetViewOptions. Fields not given keep their current value. The window then uses Custom model view options (index 0), also when only on-screen view options are given; with a combination given and only on-screen view options, it keeps the combination. With a combination and model view options or gdlOptions, these are applied on top of the combination. The options are read back, and a given field Archicad did not keep fails the call with the value it kept.",
         "properties": {
             "modelViewOptions": {
                 "type": "object",
@@ -1307,6 +1411,13 @@
             "onScreenViewOptions": {
                 "type": "object",
                 "additionalProperties": true
+            },
+            "gdlOptions": {
+                "type": "array",
+                "description": "The library part option sets to change, with the GDL parameters to change in each. Like the model view options, they are applied to the window (on top of the combination when one is given) and read back.",
+                "items": {
+                    "$ref": "#/GDLModelViewOptionSetUpdate"
+                }
             }
         },
         "additionalProperties": false
